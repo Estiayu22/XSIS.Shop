@@ -139,6 +139,20 @@ namespace XSIS.Shop.Repository
                                   Email = list.Email
                               }).ToList();
                 }
+                else if (string.IsNullOrWhiteSpace(FullName) && string.IsNullOrWhiteSpace(CityCountry) && string.IsNullOrWhiteSpace(Email))
+                {
+                    listVM = (from list in db.Customer
+                              select new CustomerViewModel
+                              {
+                                  Id = list.Id,
+                                  FirstName = list.FirstName,
+                                  LastName = list.LastName,
+                                  City = list.City,
+                                  Country = list.Country,
+                                  Phone = list.Phone,
+                                  Email = list.Email
+                              }).ToList();
+                }
                 else if (!string.IsNullOrEmpty(FullName))
                 {
                     if (!string.IsNullOrEmpty(CityCountry) && !string.IsNullOrEmpty(Email))
@@ -339,20 +353,6 @@ namespace XSIS.Shop.Repository
                                       Email = list.Email
                                   }).ToList();
                     }
-                }
-                else if(string.IsNullOrWhiteSpace(FullName) || string.IsNullOrWhiteSpace(CityCountry) || string.IsNullOrWhiteSpace(Email))
-                {
-                    listVM = (from list in db.Customer
-                              select new CustomerViewModel
-                              {
-                                  Id = list.Id,
-                                  FirstName = list.FirstName,
-                                  LastName = list.LastName,
-                                  City = list.City,
-                                  Country = list.Country,
-                                  Phone = list.Phone,
-                                  Email = list.Email
-                              }).ToList();
                 }
                 else
                 {

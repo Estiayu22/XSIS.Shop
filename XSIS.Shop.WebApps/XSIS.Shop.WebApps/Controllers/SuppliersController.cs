@@ -6,35 +6,19 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using XSIS.Shop.WebApps.Models;
-using XSIS.Shop.WebApps.ViewModels;
+using XSIS.Shop.Repository;
+using XSIS.Shop.ViewModels;
 
 namespace XSIS.Shop.WebApps.Controllers
 {
     public class SuppliersController : Controller
     {
-        private ShopEntities db = new ShopEntities();
+        private SupplierRepository service = new SupplierRepository();
 
         public ActionResult Index()
         {
-            var ListSupplier = db.Supplier.ToList();
-            List<SupplierViewModel> listVM = new List<SupplierViewModel>();
-
-            foreach(var item in ListSupplier)
-            {
-                SupplierViewModel ViewModel = new SupplierViewModel();
-                ViewModel.Id = item.Id;
-                ViewModel.CompanyName = item.CompanyName;
-                ViewModel.ContactName = item.ContactName;
-                ViewModel.ContactTitle = item.ContactTitle;
-                ViewModel.City = item.City;
-                ViewModel.Country = item.Country;
-                ViewModel.Phone = item.Phone;
-                ViewModel.Fax = item.Fax;
-                listVM.Add(ViewModel);
-            }
-
-            return View(listVM);
+            var result = service.GetAllSupplier();
+            return View(result.ToList());
         }
 
         public ActionResult Details(int? id)
@@ -44,24 +28,15 @@ namespace XSIS.Shop.WebApps.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Supplier supplier = db.Supplier.Find(id);
+            int idx = id.HasValue ? id.Value : 0;
+            SupplierViewModel supplier = service.GetSupplierById(idx);
 
             if (supplier == null)
             {
                 return HttpNotFound();
             }
 
-            SupplierViewModel ViewModel = new SupplierViewModel();
-            ViewModel.Id = supplier.Id;
-            ViewModel.CompanyName = supplier.CompanyName;
-            ViewModel.ContactName = supplier.ContactName;
-            ViewModel.ContactTitle = supplier.ContactTitle;
-            ViewModel.City = supplier.City;
-            ViewModel.Country = supplier.Country;
-            ViewModel.Phone = supplier.Phone;
-            ViewModel.Fax = supplier.Fax;
-
-            return View(ViewModel);
+            return View(supplier);
         }
 
         public ActionResult Create()
@@ -75,18 +50,7 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                Supplier model = new Supplier();
-
-                model.CompanyName = supplier.CompanyName;
-                model.ContactName = supplier.ContactName;
-                model.ContactTitle = supplier.ContactTitle;
-                model.City = supplier.City;
-                model.Country = supplier.Country;
-                model.Phone = supplier.Phone;
-                model.Fax = supplier.Fax;
-
-                db.Supplier.Add(model);
-                db.SaveChanges();
+                service.AddNewSupplier(supplier);
                 return RedirectToAction("Index");
             }
 
@@ -100,24 +64,15 @@ namespace XSIS.Shop.WebApps.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Supplier supplier = db.Supplier.Find(id);
+            int idx = id.HasValue ? id.Value : 0;
+            SupplierViewModel supplier = service.GetSupplierById(idx);
 
             if (supplier == null)
             {
                 return HttpNotFound();
             }
 
-            SupplierViewModel ViewModel = new SupplierViewModel();
-            ViewModel.Id = supplier.Id;
-            ViewModel.CompanyName = supplier.CompanyName;
-            ViewModel.ContactName = supplier.ContactName;
-            ViewModel.ContactTitle = supplier.ContactTitle;
-            ViewModel.City = supplier.City;
-            ViewModel.Country = supplier.Country;
-            ViewModel.Phone = supplier.Phone;
-            ViewModel.Fax = supplier.Fax;
-
-            return View(ViewModel);
+            return View(supplier);
         }
 
         [HttpPost]
@@ -126,18 +81,7 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                Supplier model = new Supplier();
-                model.Id = supplier.Id;
-                model.CompanyName = supplier.CompanyName;
-                model.ContactName = supplier.ContactName;
-                model.ContactTitle = supplier.ContactTitle;
-                model.City = supplier.City;
-                model.Country = supplier.Country;
-                model.Phone = supplier.Phone;
-                model.Fax = supplier.Fax;
-
-                db.Entry(model).State = EntityState.Modified;
-                db.SaveChanges();
+                service.UpdateSupplier(supplier);
                 return RedirectToAction("Index");
             }
 
@@ -151,43 +95,23 @@ namespace XSIS.Shop.WebApps.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Supplier supplier = db.Supplier.Find(id);
+            int idx = id.HasValue ? id.Value : 0;
+            SupplierViewModel supplier = service.GetSupplierById(idx);
 
             if (supplier == null)
             {
                 return HttpNotFound();
             }
 
-            SupplierViewModel ViewModel = new SupplierViewModel();
-            ViewModel.Id = supplier.Id;
-            ViewModel.CompanyName = supplier.CompanyName;
-            ViewModel.ContactName = supplier.ContactName;
-            ViewModel.ContactTitle = supplier.ContactTitle;
-            ViewModel.City = supplier.City;
-            ViewModel.Country = supplier.Country;
-            ViewModel.Phone = supplier.Phone;
-            ViewModel.Fax = supplier.Fax;
-
-            return View(ViewModel);
+            return View(supplier);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Supplier supplier = db.Supplier.Find(id);
-            db.Supplier.Remove(supplier);
-            db.SaveChanges();
+            service.DeleteSupplier(id);
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
