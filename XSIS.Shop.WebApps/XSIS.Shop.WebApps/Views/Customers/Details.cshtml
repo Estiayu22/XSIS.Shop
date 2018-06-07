@@ -1,0 +1,92 @@
+﻿@model XSIS.Shop.ViewModels.CustomerViewModel
+
+@{
+    ViewBag.SelectedHome = "";
+    ViewBag.SelectedCustomer = "active";
+    ViewBag.SelectedSupplier = "";
+    ViewBag.SelectedProduct = "";
+    ViewBag.SelectedOrder = "";
+    ViewBag.Title = "Detail Customer";
+}
+
+<div class="block-header">
+    <h2>Form Detail Existing Customer</h2>
+</div>
+
+<div class="card">
+    <form class="form-horizontal" role="form">
+        <div class="card-header">
+            <h2>
+                Detail Customer
+                <small>
+                    Form di bawah ini digunakan untuk melihat Detail Customer.
+                </small>
+            </h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="pmb-block">
+                <div class="pmbb-body p-l-30">
+                    <div class="pmbb-view">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                Nama Depan
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstName)
+                            </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                Nama Belakang
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.LastName)
+                            </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.City)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.City)
+                            </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Country)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Country)
+                            </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Phone)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Phone)
+                            </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Email)
+                            </dd>
+                        </dl>
+                        <a href="@Url.Action("Index","Customers")" class="btn btn-info btn-sm m-t-10">Back to Index</a>
+                        <a href="@Url.Action("Edit","Customers", new { id = Model.Id })" class="btn btn-primary btn-sm m-t-10"><i class="zmdi zmdi-edit"></i> Edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

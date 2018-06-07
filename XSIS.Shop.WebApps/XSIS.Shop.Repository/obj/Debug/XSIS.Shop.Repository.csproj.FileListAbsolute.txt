@@ -1,0 +1,17 @@
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\XSIS.Shop.Repository.dll.config
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\XSIS.Shop.Repository.dll
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\XSIS.Shop.Repository.pdb
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\EntityFramework.dll
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\EntityFramework.SqlServer.dll
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\XSIS.Shop.Models.dll
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\XSIS.Shop.ViewModels.dll
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\XSIS.Shop.Models.pdb
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\XSIS.Shop.Models.dll.config
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\XSIS.Shop.ViewModels.pdb
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\EntityFramework.xml
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\bin\Debug\EntityFramework.SqlServer.xml
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\obj\Debug\XSIS.Shop.Repository.csprojAssemblyReference.cache
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\obj\Debug\XSIS.Shop.Repository.csproj.CoreCompileInputs.cache
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\obj\Debug\XSIS.Shop.Repository.csproj.CopyComplete
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\obj\Debug\XSIS.Shop.Repository.dll
+E:\Bootcamp\152\Project\Web\XSIS.Shop.WebApps\XSIS.Shop.Repository\obj\Debug\XSIS.Shop.Repository.pdb

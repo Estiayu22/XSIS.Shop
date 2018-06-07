@@ -1,0 +1,17 @@
+﻿<ul class="main-menu">
+    <li class="@ViewBag.SelectedHome">
+        <a href="@Url.Action("Index","Home")"><i class="zmdi zmdi-home"></i> Home</a>
+    </li>
+    <li class="@ViewBag.SelectedCustomer">
+        <a href="@Url.Action("Index","Customers")"><i class="zmdi zmdi-format-underlined"></i> Customer</a>
+    </li>
+    <li class="@ViewBag.SelectedSupplier">
+        <a href="@Url.Action("Index","Suppliers")"><i class="zmdi zmdi-chart"></i> Supplier</a>
+    </li>
+    <li class="@ViewBag.SelectedProduct">
+        <a href="@Url.Action("Index","Products")"><i class="zmdi zmdi-view-compact"></i> Product</a>
+    </li>
+    <li class="@ViewBag.SelectedOrder">
+        <a href="@Url.Action("Index","Orders")"><i class="zmdi zmdi-collection-text"></i> Order Transaction</a>
+    </li>
+</ul>

@@ -1,0 +1,89 @@
+﻿@model XSIS.Shop.ViewModels.CustomerViewModel
+
+@{
+    ViewBag.SelectedHome = "";
+    ViewBag.SelectedCustomer = "active";
+    ViewBag.SelectedSupplier = "";
+    ViewBag.SelectedProduct = "";
+    ViewBag.SelectedOrder = "";
+    ViewBag.Title = "Edit Customer";
+}
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+<div class="block-header">
+    <h2>Form Edit Existing Customer</h2>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>
+            Edit Existing Customer
+            <small>
+                Form di bawah ini digunakan untuk mengedit customer yang sudah existing.
+            </small>
+        </h2>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "error" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="card-body card-padding">
+            <div class="form-group">
+                <div class="fg-line">
+                    @Html.LabelFor(model => model.FirstName)
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control input-sm", @placeholder = "Masukkan Nama Depan" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "error" })
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    @Html.LabelFor(model => model.LastName)
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control input-sm", @placeholder = "Masukkan Nama Belakang" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "error" })
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    @Html.LabelFor(model => model.City)
+                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control input-sm", @placeholder = "Masukkan Kota" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "error" })
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    @Html.LabelFor(model => model.Country)
+                    @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control input-sm", @placeholder = "Masukkan Negara" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "error" })
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    @Html.LabelFor(model => model.Phone)
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control input-sm", @placeholder = "Masukkan No. Telepon" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "error" })
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    @Html.LabelFor(model => model.Email)
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control input-sm", @placeholder = "Masukkan Alamat E-Mail" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "error" })
+            </div>
+            <a href="@Url.Action("Index","Customers")" class="btn btn-info btn-sm m-t-10">Back to Index</a>
+            <button type="submit" class="btn btn-primary btn-sm m-t-10">Update</button>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

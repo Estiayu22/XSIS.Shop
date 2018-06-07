@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.SelectedHome = "active";
+    ViewBag.SelectedCustomer = "";
+    ViewBag.SelectedSupplier = "";
+    ViewBag.SelectedProduct = "";
+    ViewBag.SelectedOrder = "";
+    ViewBag.Title = "Home Page";
+}
+
+<div class="block-header">
+    <h2>Dashboard XSIS Shop</h2>
+</div>
+
+<div class="mini-charts">
+    <div class="row">
+        <div class="col-sm-6 col-md-3">
+            <div class="mini-charts-item bgm-lightgreen">
+                <div class="clearfix">
+                    <div class="chart stats-bar"></div>
+                    <div class="count">
+                        <small>Total Customer</small>
+                        <h2>987,459</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3">
+            <div class="mini-charts-item bgm-purple">
+                <div class="clearfix">
+                    <div class="chart stats-bar-2"></div>
+                    <div class="count">
+                        <small>Total Supplier</small>
+                        <h2>356,785K</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3">
+            <div class="mini-charts-item bgm-orange">
+                <div class="clearfix">
+                    <div class="chart stats-line"></div>
+                    <div class="count">
+                        <small>Total Product</small>
+                        <h2>$ 458,778</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3">
+            <div class="mini-charts-item bgm-bluegray">
+                <div class="clearfix">
+                    <div class="chart stats-line-2"></div>
+                    <div class="count">
+                        <small>Total Order</small>
+                        <h2>23,856</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>List Product <small>Produk-produk yang terdapat di XSIS Shop</small></h2>
+            </div>
+
+            <div class="card-body m-t-0">
+                <table class="table table-inner table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th style="width: 60px">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="f-500 c-cyan">2569</td>
+                            <td>Samsung Galaxy Mega</td>
+                            <td class="f-500 c-cyan">$521</td>
+                        </tr>
+                        <tr>
+                            <td class="f-500 c-cyan">9658</td>
+                            <td>Huawei Ascend P6</td>
+                            <td class="f-500 c-cyan">$440</td>
+                        </tr>
+                        <tr>
+                            <td class="f-500 c-cyan">1101</td>
+                            <td>HTC One M8</td>
+                            <td class="f-500 c-cyan">$680</td>
+                        </tr>
+                        <tr>
+                            <td class="f-500 c-cyan">6598</td>
+                            <td>Samsung Galaxy Alpha</td>
+                            <td class="f-500 c-cyan">$870</td>
+                        </tr>
+                        <tr>
+                            <td class="f-500 c-cyan">4562</td>
+                            <td>LG G3</td>
+                            <td class="f-500 c-cyan">$690</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart-edge">
+                <div id="line-chart" class="flot-chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>List Order <small>Transaksi order yang terjadi di XSIS Shop</small></h2>
+            </div>
+
+            <div class="card-body m-t-0">
+                <table class="table table-inner table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th style="width: 60px">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="f-500 c-cyan">2569</td>
+                            <td>Samsung Galaxy Mega</td>
+                            <td class="f-500 c-cyan">$521</td>
+                        </tr>
+                        <tr>
+                            <td class="f-500 c-cyan">9658</td>
+                            <td>Huawei Ascend P6</td>
+                            <td class="f-500 c-cyan">$440</td>
+                        </tr>
+                        <tr>
+                            <td class="f-500 c-cyan">1101</td>
+                            <td>HTC One M8</td>
+                            <td class="f-500 c-cyan">$680</td>
+                        </tr>
+                        <tr>
+                            <td class="f-500 c-cyan">6598</td>
+                            <td>Samsung Galaxy Alpha</td>
+                            <td class="f-500 c-cyan">$870</td>
+                        </tr>
+                        <tr>
+                            <td class="f-500 c-cyan">4562</td>
+                            <td>LG G3</td>
+                            <td class="f-500 c-cyan">$690</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart-edge">
+                <div id="curved-line-chart" class="flot-chart"></div>
+            </div>
+        </div>
+    </div>
+</div>

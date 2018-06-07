@@ -1,0 +1,98 @@
+﻿@model IEnumerable<XSIS.Shop.ViewModels.CustomerViewModel>
+
+@{
+    ViewBag.SelectedHome = "";
+    ViewBag.SelectedCustomer = "active";
+    ViewBag.SelectedSupplier = "";
+    ViewBag.SelectedProduct = "";
+    ViewBag.SelectedOrder = "";
+    ViewBag.Title = "Index";
+}
+
+<div class="block-header">
+    <h2>List Customer XSIS Shop</h2>
+</div>
+
+@using (Html.BeginForm("Index", "Customers", FormMethod.Get))
+{
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <div class="fg-line">
+                            <input type="text" id="FullName" name="FullName" class="form-control" placeholder="Full Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-pin"></i></span>
+                        <div class="fg-line">
+                            <input type="text" id="CityCountry" name="CityCountry" class="form-control" placeholder="City/Country">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                        <div class="fg-line">
+                            <input type="text" id="Email" name="Email" class="form-control" placeholder="Email">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-primary btn-sm m-t-10">Search</button>
+                    <a href="@Url.Action("Create", "Customers")" class="btn btn-info btn-sm m-t-10">Create</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="data-table-basic" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Depan</th>
+                        <th>Nama Belakang</th>
+                        <th>@Html.DisplayNameFor(model => model.City)</th>
+                        <th>@Html.DisplayNameFor(model => model.Country)</th>
+                        <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                        <th>@Html.DisplayNameFor(model => model.Email)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.City)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Country)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Phone)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit","Customers", new { id = item.Id })" class="btn btn-info"><i class="zmdi zmdi-edit"></i></a>
+                                <a href="@Url.Action("Details","Customers", new { id = item.Id })" class="btn btn-success"><i class="zmdi zmdi-search-for"></i></a>
+                                <a href="@Url.Action("Delete","Customers", new { id = item.Id })" class="btn btn-danger"><i class="zmdi zmdi-delete"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
