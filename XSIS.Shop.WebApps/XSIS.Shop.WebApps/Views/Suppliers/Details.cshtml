@@ -100,6 +100,44 @@
                                 @Html.DisplayFor(model => model.Fax)
                             </dd>
                         </dl>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>
+                                        Nama Produk
+                                    </th>
+                                    <th>
+                                        Harga
+                                    </th>
+                                    <th>
+                                        Kemasan
+                                    </th>
+                                    <th>
+                                        Kadaluarsa
+                                    </th>
+                                </tr>
+
+                                @foreach (var item in Model.ListProductViewModel)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProductName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UnitPrice)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Package)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IsDiscontinued)
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+
+
                         <a href="@Url.Action("Index","Suppliers")" class="btn btn-info btn-sm m-t-10">Back to Index</a>
                         <a href="@Url.Action("Edit","Suppliers", new { id = Model.Id })" class="btn btn-primary btn-sm m-t-10"><i class="zmdi zmdi-edit"></i> Edit</a>
                     </div>

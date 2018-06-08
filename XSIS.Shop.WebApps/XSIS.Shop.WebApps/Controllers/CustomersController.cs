@@ -65,8 +65,40 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                service.AddNewCustomer(customer);
-                return RedirectToAction("Index");
+                bool CheckValidation = true;
+
+                // Cek Nama Depan dan Nama Belakang Identik
+                string NamaLengkap = service.CekNamaExisting(customer.FirstName, customer.LastName);
+
+                // Cek Email Identik
+                string Email = string.Empty;
+
+                if(!string.IsNullOrEmpty(customer.Email))
+                {
+                    Email = service.CekEmailExisting(customer.Email);
+                }
+
+                if (NamaLengkap == (customer.FirstName + " " + customer.LastName))
+                {
+                    ModelState.AddModelError("", "Maaf Nama Lengkap sudah ada di database");
+                    CheckValidation = false;
+                }
+
+                if (Email == customer.Email)
+                {
+                    ModelState.AddModelError("", "Maaf Email sudah ada di database");
+                    CheckValidation = false;
+                }
+
+                if(CheckValidation == false)
+                {
+                    return View(customer);
+                }
+                else
+                {
+                    service.AddNewCustomer(customer);
+                    return RedirectToAction("Index");
+                }
             }
 
             return View(customer);

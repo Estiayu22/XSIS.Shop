@@ -57,6 +57,48 @@ namespace XSIS.Shop.Repository
             }
         }
 
+        public SupplierViewModel GetDetailSupplierById(int id)
+        {
+            using (ShopDBEntities db = new ShopDBEntities())
+            {
+                Supplier supplier = db.Supplier.Find(id);
+
+                SupplierViewModel ViewModel = new SupplierViewModel();
+                ViewModel.Id = supplier.Id;
+                ViewModel.CompanyName = supplier.CompanyName;
+                ViewModel.ContactName = supplier.ContactName;
+                ViewModel.ContactTitle = supplier.ContactTitle;
+                ViewModel.City = supplier.City;
+                ViewModel.Country = supplier.Country;
+                ViewModel.Phone = supplier.Phone;
+                ViewModel.Fax = supplier.Fax;
+
+                List<ProductViewModel> ListProduct = new List<ProductViewModel>();
+                ListProduct = (from d in db.Product
+                               where d.SupplierId == ViewModel.Id
+                               select new ProductViewModel
+                               {
+                                   Id = d.Id,
+                                   ProductName = d.ProductName,
+                                   SupplierId = d.SupplierId,
+                                   UnitPrice = d.UnitPrice,
+                                   Package = d.Package,
+                                   IsDiscontinued = d.IsDiscontinued
+                               }).ToList();
+
+                if(ListProduct == null)
+                {
+                    ViewModel.ListProductViewModel = null;
+                }
+                else
+                {
+                    ViewModel.ListProductViewModel = ListProduct;
+                }
+
+                return ViewModel;
+            }
+        }
+
         public void AddNewSupplier(SupplierViewModel supplier)
         {
             using (ShopDBEntities db = new ShopDBEntities())

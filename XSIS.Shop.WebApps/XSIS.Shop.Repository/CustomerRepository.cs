@@ -372,5 +372,38 @@ namespace XSIS.Shop.Repository
                 return listVM;
             }
         }
+
+        public string CekNamaExisting(string FirstName, string LastName)
+        {
+            using (ShopDBEntities db = new ShopDBEntities())
+            {
+                var result = (from a in db.Customer
+                              where a.FirstName.ToLower() == FirstName.ToLower() && a.LastName.ToLower() == LastName.ToLower()
+                              select a).SingleOrDefault();
+
+                string hasil = string.Empty;
+
+                if (result != null)
+                {
+                    hasil = result.FirstName + " " + result.LastName;
+                }
+
+                return hasil;
+            }
+        }
+
+        public string CekEmailExisting(string Email)
+        {
+            using (ShopDBEntities db = new ShopDBEntities())
+            {
+                var result = (from a in db.Customer
+                              where a.Email.ToLower() == Email.ToLower()
+                              select a).SingleOrDefault();
+
+                string hasil = result.Email;
+                return hasil;
+            }
+
+        }
     }
 }

@@ -39,5 +39,7 @@ namespace XSIS.Shop.ViewModels
         [Display(Name = "No. Faksimile")]
         [StringLength(30, ErrorMessage = "Panjang karakter No. Faksimile maksimal 30.")]
         public string Fax { get; set; }
+
+        public List<ProductViewModel> ListProductViewModel { get; set; }
     }
 }

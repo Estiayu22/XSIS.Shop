@@ -29,7 +29,7 @@ namespace XSIS.Shop.WebApps.Controllers
             }
 
             int idx = id.HasValue ? id.Value : 0;
-            SupplierViewModel supplier = service.GetSupplierById(idx);
+            SupplierViewModel supplier = service.GetDetailSupplierById(idx);
 
             if (supplier == null)
             {
