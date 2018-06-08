@@ -159,7 +159,7 @@ namespace XSIS.Shop.Repository
                     {
                         listVM = (from list in db.Customer
                                 where (list.FirstName.ToLower().Contains(FullName.ToLower()) || list.LastName.ToLower().Contains(FullName.ToLower())) ||
-                                (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(FullName.ToLower())) ||
+                                (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(CityCountry.ToLower())) ||
                                 (list.Email.ToLower().Contains(Email.ToLower()))
                                 select new CustomerViewModel
                                 {
@@ -176,7 +176,7 @@ namespace XSIS.Shop.Repository
                     {
                         listVM = (from list in db.Customer
                                   where (list.FirstName.ToLower().Contains(FullName.ToLower()) || list.LastName.ToLower().Contains(FullName.ToLower())) ||
-                                  (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(FullName.ToLower()))
+                                  (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(CityCountry.ToLower()))
                                   select new CustomerViewModel
                                   {
                                       Id = list.Id,
@@ -226,7 +226,7 @@ namespace XSIS.Shop.Repository
                     {
                         listVM = (from list in db.Customer
                                   where (list.FirstName.ToLower().Contains(FullName.ToLower()) || list.LastName.ToLower().Contains(FullName.ToLower())) ||
-                                  (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(FullName.ToLower())) ||
+                                  (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(CityCountry.ToLower())) ||
                                   (list.Email.ToLower().Contains(Email.ToLower()))
                                   select new CustomerViewModel
                                   {
@@ -243,7 +243,7 @@ namespace XSIS.Shop.Repository
                     {
                         listVM = (from list in db.Customer
                                   where (list.FirstName.ToLower().Contains(FullName.ToLower()) || list.LastName.ToLower().Contains(FullName.ToLower())) ||
-                                  (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(FullName.ToLower()))
+                                  (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(CityCountry.ToLower()))
                                   select new CustomerViewModel
                                   {
                                       Id = list.Id,
@@ -258,7 +258,7 @@ namespace XSIS.Shop.Repository
                     else if (string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(Email))
                     {
                         listVM = (from list in db.Customer
-                                  where (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(FullName.ToLower())) ||
+                                  where (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(CityCountry.ToLower())) ||
                                   (list.Email.ToLower().Contains(Email.ToLower()))
                                   select new CustomerViewModel
                                   {
@@ -274,7 +274,7 @@ namespace XSIS.Shop.Repository
                     else
                     {
                         listVM = (from list in db.Customer
-                                  where (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(FullName.ToLower()))
+                                  where (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(CityCountry.ToLower()))
                                   select new CustomerViewModel
                                   {
                                       Id = list.Id,
@@ -293,7 +293,7 @@ namespace XSIS.Shop.Repository
                     {
                         listVM = (from list in db.Customer
                                   where (list.FirstName.ToLower().Contains(FullName.ToLower()) || list.LastName.ToLower().Contains(FullName.ToLower())) ||
-                                  (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(FullName.ToLower())) ||
+                                  (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(CityCountry.ToLower())) ||
                                   (list.Email.ToLower().Contains(Email.ToLower()))
                                   select new CustomerViewModel
                                   {
@@ -309,7 +309,7 @@ namespace XSIS.Shop.Repository
                     else if (!string.IsNullOrEmpty(CityCountry) && string.IsNullOrEmpty(FullName))
                     {
                         listVM = (from list in db.Customer
-                                  where (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(FullName.ToLower())) ||
+                                  where (list.City.ToLower().Contains(CityCountry.ToLower()) || list.Country.ToLower().Contains(CityCountry.ToLower())) ||
                                   (list.Email.ToLower().Contains(Email.ToLower()))
                                   select new CustomerViewModel
                                   {

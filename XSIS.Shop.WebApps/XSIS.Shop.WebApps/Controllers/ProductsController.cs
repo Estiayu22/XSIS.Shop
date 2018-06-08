@@ -6,37 +6,19 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using XSIS.Shop.WebApps.Models;
-using XSIS.Shop.WebApps.ViewModels;
+using XSIS.Shop.ViewModels;
 using XSIS.Shop.Repository;
 
 namespace XSIS.Shop.WebApps.Controllers
 {
     public class ProductsController : Controller
     {
-        private ShopEntities db = new ShopEntities();
         private ProductRepository service = new ProductRepository();
 
         public ActionResult Index()
         {
             var result = service.GetAllProduct();
-            var product = db.Product.Include(p => p.Supplier);
-            List<ProductViewModel> ListVM = new List<ProductViewModel>();
-
-            foreach(var item in product)
-            {
-                ProductViewModel ViewModel = new ProductViewModel();
-                ViewModel.Id = item.Id;
-                ViewModel.ProductName = item.ProductName;
-                ViewModel.SupplierId = item.SupplierId;
-                ViewModel.UnitPrice = item.UnitPrice;
-                ViewModel.Package = item.Package;
-                ViewModel.IsDiscontinued = item.IsDiscontinued;
-                ViewModel.SupplierName = item.Supplier.CompanyName;
-                ListVM.Add(ViewModel);
-            }
-
-            return View(ListVM);
+            return View(result.ToList());
         }
 
         public ActionResult Details(int? id)
@@ -46,28 +28,20 @@ namespace XSIS.Shop.WebApps.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Product product = db.Product.Find(id);
+            int idx = id.HasValue ? id.Value : 0;
+            ProductViewModel product = service.GetProductById(idx);
 
             if (product == null)
             {
                 return HttpNotFound();
             }
 
-            ProductViewModel ViewModel = new ProductViewModel();
-            ViewModel.Id = product.Id;
-            ViewModel.ProductName = product.ProductName;
-            ViewModel.SupplierId = product.SupplierId;
-            ViewModel.UnitPrice = product.UnitPrice;
-            ViewModel.Package = product.Package;
-            ViewModel.IsDiscontinued = product.IsDiscontinued;
-            ViewModel.SupplierName = product.Supplier.CompanyName;
-
-            return View(ViewModel);
+            return View(product);
         }
 
         public ActionResult Create()
         {
-            ViewBag.SupplierId = new SelectList(db.Supplier, "Id", "CompanyName");
+            ViewBag.SupplierId = new SelectList(service.GetSupplierDDL(), "Id", "CompanyName");
             return View();
         }
 
@@ -77,20 +51,11 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                Product model = new Product();
-
-                model.ProductName = product.ProductName;
-                model.SupplierId = product.SupplierId;
-                model.UnitPrice = product.UnitPrice;
-                model.Package = product.Package;
-                model.IsDiscontinued = product.IsDiscontinued;
-
-                db.Product.Add(model);
-                db.SaveChanges();
+                service.AddNewProduct(product);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.SupplierId = new SelectList(db.Supplier, "Id", "CompanyName", product.SupplierId);
+            ViewBag.SupplierId = new SelectList(service.GetSupplierDDL(), "Id", "CompanyName", product.SupplierId);
             return View(product);
         }
 
@@ -101,24 +66,17 @@ namespace XSIS.Shop.WebApps.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Product product = db.Product.Find(id);
+            int idx = id.HasValue ? id.Value : 0;
+            ProductViewModel product = service.GetProductById(idx);
 
             if (product == null)
             {
                 return HttpNotFound();
             }
 
-            ProductViewModel ViewModel = new ProductViewModel();
-            ViewModel.Id = product.Id;
-            ViewModel.ProductName = product.ProductName;
-            ViewModel.SupplierId = product.SupplierId;
-            ViewModel.UnitPrice = product.UnitPrice;
-            ViewModel.Package = product.Package;
-            ViewModel.IsDiscontinued = product.IsDiscontinued;
-            ViewModel.SupplierName = product.Supplier.CompanyName;
+            ViewBag.SupplierId = new SelectList(service.GetSupplierDDL(), "Id", "CompanyName", product.SupplierId);
 
-            ViewBag.SupplierId = new SelectList(db.Supplier, "Id", "CompanyName", product.SupplierId);
-            return View(ViewModel);
+            return View(product);
         }
 
         [HttpPost]
@@ -127,20 +85,11 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                Product model = new Product();
-                model.Id = product.Id;
-                model.ProductName = product.ProductName;
-                model.SupplierId = product.SupplierId;
-                model.UnitPrice = product.UnitPrice;
-                model.Package = product.Package;
-                model.IsDiscontinued = product.IsDiscontinued;
-
-                db.Entry(model).State = EntityState.Modified;
-                db.SaveChanges();
+                service.UpdateProduct(product);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.SupplierId = new SelectList(db.Supplier, "Id", "CompanyName", product.SupplierId);
+            ViewBag.SupplierId = new SelectList(service.GetSupplierDDL(), "Id", "CompanyName", product.SupplierId);
             return View(product);
         }
 
@@ -151,42 +100,23 @@ namespace XSIS.Shop.WebApps.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Product product = db.Product.Find(id);
+            int idx = id.HasValue ? id.Value : 0;
+            ProductViewModel product = service.GetProductById(idx);
 
             if (product == null)
             {
                 return HttpNotFound();
             }
 
-            ProductViewModel ViewModel = new ProductViewModel();
-            ViewModel.Id = product.Id;
-            ViewModel.ProductName = product.ProductName;
-            ViewModel.SupplierId = product.SupplierId;
-            ViewModel.UnitPrice = product.UnitPrice;
-            ViewModel.Package = product.Package;
-            ViewModel.IsDiscontinued = product.IsDiscontinued;
-            ViewModel.SupplierName = product.Supplier.CompanyName;
-
-            return View(ViewModel);
+            return View(product);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Product product = db.Product.Find(id);
-            db.Product.Remove(product);
-            db.SaveChanges();
+            service.DeleteProduct(id);
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
