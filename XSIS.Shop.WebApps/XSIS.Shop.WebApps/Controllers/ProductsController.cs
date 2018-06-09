@@ -41,6 +41,7 @@ namespace XSIS.Shop.WebApps.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.ChkDefValue = "true";
             ViewBag.SupplierId = new SelectList(service.GetSupplierDDL(), "Id", "CompanyName");
             return View();
         }
@@ -51,7 +52,7 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                service.AddNewProduct(product);
+                //service.AddNewProduct(product);
                 return RedirectToAction("Index");
             }
 
@@ -74,6 +75,18 @@ namespace XSIS.Shop.WebApps.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.ChkValue = product.IsDiscontinued.ToString().ToLower();
+
+            if(product.IsDiscontinued == true)
+            {
+                ViewBag.ChkSelect = "checked=checked";
+            }
+            else
+            {
+                ViewBag.ChkSelect = "";
+
+            }
+
             ViewBag.SupplierId = new SelectList(service.GetSupplierDDL(), "Id", "CompanyName", product.SupplierId);
 
             return View(product);
@@ -85,7 +98,7 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                service.UpdateProduct(product);
+                //service.UpdateProduct(product);
                 return RedirectToAction("Index");
             }
 
