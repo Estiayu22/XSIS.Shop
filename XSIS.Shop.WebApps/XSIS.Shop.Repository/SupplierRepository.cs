@@ -146,5 +146,291 @@ namespace XSIS.Shop.Repository
                 db.SaveChanges();
             }
         }
+
+        // Filtering Search based on CompanyName/EmployeeName, City/Country, PhoneNo
+        public List<SupplierViewModel> SearchByKey(string FullName, string CityCountry, string PhoneNo)
+        {
+            using (ShopDBEntities db = new ShopDBEntities())
+            {
+                List<SupplierViewModel> listVM = new List<SupplierViewModel>();
+
+                if (FullName == " " && CityCountry == " " && PhoneNo == " ")
+                {
+                    listVM = (from item in db.Supplier
+                              select new SupplierViewModel
+                              {
+                                Id = item.Id,
+                                CompanyName = item.CompanyName,
+                                ContactName = item.ContactName,
+                                ContactTitle = item.ContactTitle,
+                                City = item.City,
+                                Country = item.Country,
+                                Phone = item.Phone,
+                                Fax = item.Fax
+                              }).ToList();
+                }
+                else if (FullName == null && CityCountry == null && PhoneNo == null)
+                {
+                    listVM = (from item in db.Supplier
+                              select new SupplierViewModel
+                              {
+                                  Id = item.Id,
+                                  CompanyName = item.CompanyName,
+                                  ContactName = item.ContactName,
+                                  ContactTitle = item.ContactTitle,
+                                  City = item.City,
+                                  Country = item.Country,
+                                  Phone = item.Phone,
+                                  Fax = item.Fax
+                              }).ToList();
+                }
+                else if (string.IsNullOrWhiteSpace(FullName) && string.IsNullOrWhiteSpace(CityCountry) && string.IsNullOrWhiteSpace(PhoneNo))
+                {
+                    listVM = (from item in db.Supplier
+                              select new SupplierViewModel
+                              {
+                                  Id = item.Id,
+                                  CompanyName = item.CompanyName,
+                                  ContactName = item.ContactName,
+                                  ContactTitle = item.ContactTitle,
+                                  City = item.City,
+                                  Country = item.Country,
+                                  Phone = item.Phone,
+                                  Fax = item.Fax
+                              }).ToList();
+                }
+                else if (!string.IsNullOrEmpty(FullName))
+                {
+                    if (!string.IsNullOrEmpty(CityCountry) && !string.IsNullOrEmpty(PhoneNo))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.CompanyName.ToLower().Contains(FullName.ToLower()) || item.ContactName.ToLower().Contains(FullName.ToLower())) ||
+                                  (item.City.ToLower().Contains(CityCountry.ToLower()) || item.Country.ToLower().Contains(CityCountry.ToLower())) ||
+                                  (item.Phone.ToLower().Contains(PhoneNo.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(CityCountry) && string.IsNullOrEmpty(PhoneNo))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.CompanyName.ToLower().Contains(FullName.ToLower()) || item.ContactName.ToLower().Contains(FullName.ToLower())) ||
+                                  (item.City.ToLower().Contains(CityCountry.ToLower()) || item.Country.ToLower().Contains(CityCountry.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else if (string.IsNullOrEmpty(CityCountry) && !string.IsNullOrEmpty(PhoneNo))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.CompanyName.ToLower().Contains(FullName.ToLower()) || item.ContactName.ToLower().Contains(FullName.ToLower())) ||
+                                  (item.Phone.ToLower().Contains(PhoneNo.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.CompanyName.ToLower().Contains(FullName.ToLower()) || item.ContactName.ToLower().Contains(FullName.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                }
+                else if (!string.IsNullOrEmpty(CityCountry))
+                {
+                    if (!string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(PhoneNo))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.CompanyName.ToLower().Contains(FullName.ToLower()) || item.ContactName.ToLower().Contains(FullName.ToLower())) ||
+                                  (item.City.ToLower().Contains(CityCountry.ToLower()) || item.Country.ToLower().Contains(CityCountry.ToLower())) ||
+                                  (item.Phone.ToLower().Contains(PhoneNo.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(FullName) && string.IsNullOrEmpty(PhoneNo))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.CompanyName.ToLower().Contains(FullName.ToLower()) || item.ContactName.ToLower().Contains(FullName.ToLower())) ||
+                                  (item.City.ToLower().Contains(CityCountry.ToLower()) || item.Country.ToLower().Contains(CityCountry.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else if (string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(PhoneNo))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.City.ToLower().Contains(CityCountry.ToLower()) || item.Country.ToLower().Contains(CityCountry.ToLower())) ||
+                                  (item.Phone.ToLower().Contains(PhoneNo.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.City.ToLower().Contains(CityCountry.ToLower()) || item.Country.ToLower().Contains(CityCountry.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                }
+                else if (!string.IsNullOrEmpty(PhoneNo))
+                {
+                    if (!string.IsNullOrEmpty(CityCountry) && !string.IsNullOrEmpty(FullName))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.CompanyName.ToLower().Contains(FullName.ToLower()) || item.ContactName.ToLower().Contains(FullName.ToLower())) ||
+                                  (item.City.ToLower().Contains(CityCountry.ToLower()) || item.Country.ToLower().Contains(CityCountry.ToLower())) ||
+                                  (item.Phone.ToLower().Contains(PhoneNo.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(CityCountry) && string.IsNullOrEmpty(FullName))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.City.ToLower().Contains(CityCountry.ToLower()) || item.Country.ToLower().Contains(CityCountry.ToLower())) ||
+                                  (item.Phone.ToLower().Contains(PhoneNo.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else if (string.IsNullOrEmpty(CityCountry) && !string.IsNullOrEmpty(FullName))
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.CompanyName.ToLower().Contains(FullName.ToLower()) || item.ContactName.ToLower().Contains(FullName.ToLower())) ||
+                                  (item.Phone.ToLower().Contains(PhoneNo.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                    else
+                    {
+                        listVM = (from item in db.Supplier
+                                  where (item.Phone.ToLower().Contains(PhoneNo.ToLower()))
+                                  select new SupplierViewModel
+                                  {
+                                      Id = item.Id,
+                                      CompanyName = item.CompanyName,
+                                      ContactName = item.ContactName,
+                                      ContactTitle = item.ContactTitle,
+                                      City = item.City,
+                                      Country = item.Country,
+                                      Phone = item.Phone,
+                                      Fax = item.Fax
+                                  }).ToList();
+                    }
+                }
+                else
+                {
+                    listVM = (from item in db.Supplier
+                              select new SupplierViewModel
+                              {
+                                  Id = item.Id,
+                                  CompanyName = item.CompanyName,
+                                  ContactName = item.ContactName,
+                                  ContactTitle = item.ContactTitle,
+                                  City = item.City,
+                                  Country = item.Country,
+                                  Phone = item.Phone,
+                                  Fax = item.Fax
+                              }).ToList();
+                }
+
+                return listVM;
+            }
+        }
+
     }
 }

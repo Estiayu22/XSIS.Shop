@@ -13,11 +13,27 @@ namespace XSIS.Shop.WebApps.Controllers
 {
     public class SuppliersController : Controller
     {
+
         private SupplierRepository service = new SupplierRepository();
 
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Index(string FullName, string CityCountry, string PhoneNo)
         {
-            var result = service.GetAllSupplier();
+            List<SupplierViewModel> list = null;
+            var result = list;
+
+            if (!string.IsNullOrEmpty(FullName) || !string.IsNullOrEmpty(CityCountry) || !string.IsNullOrEmpty(PhoneNo) ||
+                !string.IsNullOrWhiteSpace(FullName) || !string.IsNullOrWhiteSpace(CityCountry) || !string.IsNullOrWhiteSpace(PhoneNo)
+                || FullName != " " || CityCountry != " " || PhoneNo != " ")
+
+            {
+                result = service.SearchByKey(FullName, CityCountry, PhoneNo);
+            }
+            else
+            {
+                result = service.GetAllSupplier();
+            }
+
             return View(result.ToList());
         }
 

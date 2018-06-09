@@ -33,10 +33,22 @@ namespace XSIS.Shop.ViewModels
         public string Country { get; set; }
 
         [Display(Name = "No. Telepon")]
+        [DataType(DataType.PhoneNumber)]
+
+        /* (123) 456 7899
+        (123).456.7899
+        (123)-456-7899
+        123-456-7899
+        123 456 7899
+        1234567899 */
+
+        [RegularExpression("^\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})$", ErrorMessage = "Mohon masukkan No. Telepon yang valid.")]
         [StringLength(30, ErrorMessage = "Panjang karakter No. Telepon maksimal 30.")]
         public string Phone { get; set; }
 
         [Display(Name = "No. Faksimile")]
+        [RegularExpression("^\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})$", ErrorMessage = "Mohon masukkan No. Faksimile yang valid.")]
+
         [StringLength(30, ErrorMessage = "Panjang karakter No. Faksimile maksimal 30.")]
         public string Fax { get; set; }
 

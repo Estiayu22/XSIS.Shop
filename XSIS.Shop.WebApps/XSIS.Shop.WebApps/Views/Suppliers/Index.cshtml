@@ -18,6 +18,31 @@
     <div class="card-header">
         <div class="row">
             <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                    <div class="fg-line">
+                        <input type="text" id="FullName" name="FullName" class="form-control" placeholder="Full Name/Employee">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="zmdi zmdi-pin"></i></span>
+                    <div class="fg-line">
+                        <input type="text" id="CityCountry" name="CityCountry" class="form-control" placeholder="City/Country">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                    <div class="fg-line">
+                        <input type="text" id="PhoneNo" name="PhoneNo" class="form-control" placeholder="Phone No.">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <button type="submit" class="btn btn-primary btn-sm m-t-10">Search</button>
                 <a href="@Url.Action("Create", "Suppliers")" class="btn btn-info btn-sm m-t-10">Create</a>
             </div>
         </div>
