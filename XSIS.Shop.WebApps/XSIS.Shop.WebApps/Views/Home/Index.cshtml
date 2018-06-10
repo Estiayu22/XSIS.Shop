@@ -19,7 +19,7 @@
                     <div class="chart stats-bar"></div>
                     <div class="count">
                         <small>Total Customer</small>
-                        <h2>987,459</h2>
+                        <h2>@ViewBag.TotalCustomers</h2>
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                     <div class="chart stats-bar-2"></div>
                     <div class="count">
                         <small>Total Supplier</small>
-                        <h2>356,785K</h2>
+                        <h2>@ViewBag.TotalSuppliers</h2>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     <div class="chart stats-line"></div>
                     <div class="count">
                         <small>Total Product</small>
-                        <h2>$ 458,778</h2>
+                        <h2>@ViewBag.TotalProducts</h2>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                     <div class="chart stats-line-2"></div>
                     <div class="count">
                         <small>Total Order</small>
-                        <h2>23,856</h2>
+                        <h2>@ViewBag.TotalOrders</h2>
                     </div>
                 </div>
             </div>
@@ -75,36 +75,19 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th style="width: 60px">Price</th>
+                            <th>Produk</th>
+                            <th style="width: 60px">Harga</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="f-500 c-cyan">2569</td>
-                            <td>Samsung Galaxy Mega</td>
-                            <td class="f-500 c-cyan">$521</td>
-                        </tr>
-                        <tr>
-                            <td class="f-500 c-cyan">9658</td>
-                            <td>Huawei Ascend P6</td>
-                            <td class="f-500 c-cyan">$440</td>
-                        </tr>
-                        <tr>
-                            <td class="f-500 c-cyan">1101</td>
-                            <td>HTC One M8</td>
-                            <td class="f-500 c-cyan">$680</td>
-                        </tr>
-                        <tr>
-                            <td class="f-500 c-cyan">6598</td>
-                            <td>Samsung Galaxy Alpha</td>
-                            <td class="f-500 c-cyan">$870</td>
-                        </tr>
-                        <tr>
-                            <td class="f-500 c-cyan">4562</td>
-                            <td>LG G3</td>
-                            <td class="f-500 c-cyan">$690</td>
-                        </tr>
+                        @foreach(var item in ViewBag.ListProducts)
+                        {
+                            <tr>
+                                <td class="f-500 c-cyan">@item.Id</td>
+                                <td>@item.ProductName</td>
+                                <td class="f-500 c-cyan">@item.UnitPrice</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -125,36 +108,19 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th style="width: 60px">Price</th>
+                            <th>No. Order</th>
+                            <th style="width: 60px">Total</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="f-500 c-cyan">2569</td>
-                            <td>Samsung Galaxy Mega</td>
-                            <td class="f-500 c-cyan">$521</td>
-                        </tr>
-                        <tr>
-                            <td class="f-500 c-cyan">9658</td>
-                            <td>Huawei Ascend P6</td>
-                            <td class="f-500 c-cyan">$440</td>
-                        </tr>
-                        <tr>
-                            <td class="f-500 c-cyan">1101</td>
-                            <td>HTC One M8</td>
-                            <td class="f-500 c-cyan">$680</td>
-                        </tr>
-                        <tr>
-                            <td class="f-500 c-cyan">6598</td>
-                            <td>Samsung Galaxy Alpha</td>
-                            <td class="f-500 c-cyan">$870</td>
-                        </tr>
-                        <tr>
-                            <td class="f-500 c-cyan">4562</td>
-                            <td>LG G3</td>
-                            <td class="f-500 c-cyan">$690</td>
-                        </tr>
+                        @foreach (var item in ViewBag.ListOrders)
+                        {
+                            <tr>
+                                <td class="f-500 c-cyan">@item.Id</td>
+                                <td>@item.OrderNumber</td>
+                                <td class="f-500 c-cyan">@item.TotalAmount</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
