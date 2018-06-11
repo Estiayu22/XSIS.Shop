@@ -32,10 +32,23 @@ namespace XSIS.Shop.WebApps.Controllers
 
             {
                 result = service.SearchByKey(FullName, CityCountry, Email);
+                // Get All Customer API Akses http://localhost:2099/api/CustomerApi/FullName/CityCountry/Email with parameter
+                string ApiEndPoint = ApiUrl + "api/CustomerApi/SearchByKey/" + (FullName + "|" + CityCountry + "|" + Email);
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+                string ListResult = response.Content.ReadAsStringAsync().Result.ToString();
+                result = JsonConvert.DeserializeObject<List<CustomerViewModel>>(ListResult);
             }
             else
             {
-                result = service.GetAllCustomer();
+                // Get All Customer API Akses http://localhost:2099/api/CustomerApi/ without parameter
+                string ApiEndPoint = ApiUrl + "api/CustomerApi/";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+                string ListResult = response.Content.ReadAsStringAsync().Result.ToString();
+                result = JsonConvert.DeserializeObject<List<CustomerViewModel>>(ListResult);
             }
 
             return View(result.ToList());
@@ -85,7 +98,7 @@ namespace XSIS.Shop.WebApps.Controllers
                 HttpClient client = new HttpClient();
                 HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
 
-                string NamaLengkap = response.Content.ReadAsStringAsync().Result.ToString();
+                string NamaLengkap = response.Content.ReadAsStringAsync().Result.ToString().Replace("\\", "").Replace("\"", "");
 
                 // Cek Email Identik
                 string Email = string.Empty;
@@ -97,7 +110,7 @@ namespace XSIS.Shop.WebApps.Controllers
                     HttpClient client1 = new HttpClient();
                     HttpResponseMessage response1 = client1.GetAsync(ApiEndPoint1).Result;
 
-                    Email = response1.Content.ReadAsStringAsync().Result.ToString();
+                    Email = response1.Content.ReadAsStringAsync().Result.ToString().Replace("\\", "").Replace("\"", "");
                 }
 
                 if (NamaLengkap == (customer.FirstName + " " + customer.LastName))

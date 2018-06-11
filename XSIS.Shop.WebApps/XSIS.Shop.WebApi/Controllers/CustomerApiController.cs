@@ -29,6 +29,19 @@ namespace XSIS.Shop.WebApi.Controllers
         }
 
         [HttpGet]
+        public List<CustomerViewModel> SearchByKey(string id)
+        {
+            string[] Parameters = id.Split('|');
+
+            string param1 = Parameters[0];
+            string param2 = Parameters[1];
+            string param3 = Parameters[2];
+
+            var result = service.SearchByKey(param1, param2, param3);
+            return result;
+        }
+
+        [HttpGet]
         public string CekNamaExisting(string id, string id2)
         {
             var result = service.CekNamaExisting(id, id2);

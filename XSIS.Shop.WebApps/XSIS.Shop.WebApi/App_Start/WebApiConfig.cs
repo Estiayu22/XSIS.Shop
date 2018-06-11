@@ -24,13 +24,13 @@ namespace XSIS.Shop.WebApi
                name: "CustomMethodApi1Param",
                routeTemplate: "api/{controller}/{action}/{id}",
                defaults: new { action = "get", id = RouteParameter.Optional }
-           );
+            );
 
             config.Routes.MapHttpRoute(
               name: "CustomMethodApi2Param",
               routeTemplate: "api/{controller}/{action}/{id}/{id2}",
               defaults: new { action = "get", id = RouteParameter.Optional, id2 = RouteParameter.Optional }
-          );
+            );
         }
     }
 }
