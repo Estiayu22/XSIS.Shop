@@ -8,11 +8,16 @@ using System.Web;
 using System.Web.Mvc;
 using XSIS.Shop.Repository;
 using XSIS.Shop.ViewModels;
+using System.Web.Configuration;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace XSIS.Shop.WebApps.Controllers
 {
     public class CustomersController : Controller
     {
+        private string ApiUrl = WebConfigurationManager.AppSettings["XSIS.Shop.API"];
         private CustomerRepository service = new CustomerRepository();
 
         [HttpGet]
@@ -44,7 +49,14 @@ namespace XSIS.Shop.WebApps.Controllers
             }
 
             int idx = id.HasValue ? id.Value : 0;
-            CustomerViewModel custVM = service.GetCustomerById(idx);
+
+            // Details API Akses http://localhost:2099/api/CustomerApi/1
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/" + idx;
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string result = response.Content.ReadAsStringAsync().Result.ToString();
+            CustomerViewModel custVM = JsonConvert.DeserializeObject<CustomerViewModel>(result);
 
             if (custVM == null)
             {
@@ -68,14 +80,24 @@ namespace XSIS.Shop.WebApps.Controllers
                 bool CheckValidation = true;
 
                 // Cek Nama Depan dan Nama Belakang Identik
-                string NamaLengkap = service.CekNamaExisting(customer.FirstName, customer.LastName);
+                // Check Nama API Akses http://localhost:2099/api/CustomerApi/CekNamaExisting?param=Maria&param2=Anders
+                string ApiEndPoint = ApiUrl + "api/CustomerApi/CekNamaExisting/" + customer.FirstName + "/" + customer.LastName;
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+                string NamaLengkap = response.Content.ReadAsStringAsync().Result.ToString();
 
                 // Cek Email Identik
                 string Email = string.Empty;
 
                 if(!string.IsNullOrEmpty(customer.Email))
                 {
-                    Email = service.CekEmailExisting(customer.Email);
+                    // Check Email API Akses http://localhost:2099/api/CustomerApi/CheckNamaExisting/Email
+                    string ApiEndPoint1 = ApiUrl + "api/CustomerApi/CekEmailExisting/" + customer.Email;
+                    HttpClient client1 = new HttpClient();
+                    HttpResponseMessage response1 = client1.GetAsync(ApiEndPoint1).Result;
+
+                    Email = response1.Content.ReadAsStringAsync().Result.ToString();
                 }
 
                 if (NamaLengkap == (customer.FirstName + " " + customer.LastName))
@@ -96,8 +118,29 @@ namespace XSIS.Shop.WebApps.Controllers
                 }
                 else
                 {
-                    service.AddNewCustomer(customer);
-                    return RedirectToAction("Index");
+                    // Create API Akses http://localhost:2099/api/CustomerApi/Customer
+
+                    string json = JsonConvert.SerializeObject(customer);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(json);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    string ApiEndPoint2 = ApiUrl + "api/CustomerApi/";
+                    HttpClient client2 = new HttpClient();
+
+                    HttpResponseMessage response2 = client2.PostAsync(ApiEndPoint2, byteContent).Result;
+
+                    string result = response2.Content.ReadAsStringAsync().Result.ToString();
+                    int success = int.Parse(result);
+
+                    if(success == 1)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return View(customer);
+                    }
                 }
             }
 
@@ -112,7 +155,14 @@ namespace XSIS.Shop.WebApps.Controllers
             }
 
             int idx = id.HasValue ? id.Value : 0;
-            CustomerViewModel custVM = service.GetCustomerById(idx);
+
+            // Details API Akses http://localhost:2099/api/CustomerApi/1
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/" + idx;
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string result = response.Content.ReadAsStringAsync().Result.ToString();
+            CustomerViewModel custVM = JsonConvert.DeserializeObject<CustomerViewModel>(result);
 
             if (custVM == null)
             {
@@ -128,8 +178,29 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                service.UpdateCustomer(customer);
-                return RedirectToAction("Index");
+                // Update API Akses http://localhost:2099/api/CustomerApi/Customer
+
+                string json = JsonConvert.SerializeObject(customer);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                string ApiEndPoint = ApiUrl + "api/CustomerApi/";
+                HttpClient client = new HttpClient();
+
+                HttpResponseMessage response = client.PutAsync(ApiEndPoint, byteContent).Result;
+
+                string result = response.Content.ReadAsStringAsync().Result.ToString();
+                int success = int.Parse(result);
+
+                if (success == 1)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(customer);
+                }
             }
 
             return View(customer);
@@ -143,7 +214,14 @@ namespace XSIS.Shop.WebApps.Controllers
             }
 
             int idx = id.HasValue ? id.Value : 0;
-            CustomerViewModel custVM = service.GetCustomerById(idx);
+
+            // Details API Akses http://localhost:2099/api/CustomerApi/1
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/" + idx;
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string result = response.Content.ReadAsStringAsync().Result.ToString();
+            CustomerViewModel custVM = JsonConvert.DeserializeObject<CustomerViewModel>(result);
 
             if (custVM == null)
             {
@@ -157,8 +235,22 @@ namespace XSIS.Shop.WebApps.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            service.DeleteCustomer(id);
-            return RedirectToAction("Index");
+            // Delete API Akses http://localhost:2099/api/CustomerApi/1
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/" + id;
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.DeleteAsync(ApiEndPoint).Result;
+
+            string result = response.Content.ReadAsStringAsync().Result.ToString();
+            int success = int.Parse(result);
+
+            if (success == 1)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return HttpNotFound();
+            }
         }
     }
 }

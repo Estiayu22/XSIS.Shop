@@ -396,11 +396,20 @@ namespace XSIS.Shop.Repository
         {
             using (ShopDBEntities db = new ShopDBEntities())
             {
+                string hasil = string.Empty;
                 var result = (from a in db.Customer
                               where a.Email.ToLower() == Email.ToLower()
                               select a).SingleOrDefault();
 
-                string hasil = result.Email;
+                if(result == null)
+                {
+                    hasil = "";
+                }
+                else
+                {
+                    hasil = result.Email;
+                }
+
                 return hasil;
             }
 
