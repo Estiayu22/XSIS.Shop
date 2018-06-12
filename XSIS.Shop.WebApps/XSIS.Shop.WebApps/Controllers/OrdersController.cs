@@ -14,14 +14,12 @@ namespace XSIS.Shop.WebApps.Controllers
     {
         private ShopDBEntities db = new ShopDBEntities();
 
-        // GET: Orders
         public ActionResult Index()
         {
             var order = db.Order.Include(o => o.Customer);
             return View(order.ToList());
         }
 
-        // GET: Orders/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,19 +34,15 @@ namespace XSIS.Shop.WebApps.Controllers
             return View(order);
         }
 
-        // GET: Orders/Create
         public ActionResult Create()
         {
             ViewBag.CustomerId = new SelectList(db.Customer, "Id", "FirstName");
             return View();
         }
 
-        // POST: Orders/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OrderDate,OrderNumber,CustomerId,TotalAmount")] Order order)
+        public ActionResult Create(Order order)
         {
             if (ModelState.IsValid)
             {
@@ -61,7 +55,6 @@ namespace XSIS.Shop.WebApps.Controllers
             return View(order);
         }
 
-        // GET: Orders/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -77,12 +70,9 @@ namespace XSIS.Shop.WebApps.Controllers
             return View(order);
         }
 
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,OrderDate,OrderNumber,CustomerId,TotalAmount")] Order order)
+        public ActionResult Edit(Order order)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +84,6 @@ namespace XSIS.Shop.WebApps.Controllers
             return View(order);
         }
 
-        // GET: Orders/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -109,7 +98,6 @@ namespace XSIS.Shop.WebApps.Controllers
             return View(order);
         }
 
-        // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
