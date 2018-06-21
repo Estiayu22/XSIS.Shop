@@ -1,0 +1,22 @@
+﻿@model IEnumerable<XSIS.Shop.ViewModels.OrderItemViewModel>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UnitPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            Rp. @Html.DisplayFor(modelItem => item.TotalAmount)
+        </td>
+        <td>
+            <button class="btn btn-danger btn-hapus" id="@item.ProductId">Remove</button>
+        </td>
+    </tr>
+}

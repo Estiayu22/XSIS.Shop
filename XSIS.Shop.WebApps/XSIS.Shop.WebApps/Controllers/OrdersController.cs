@@ -20,7 +20,10 @@ namespace XSIS.Shop.WebApps.Controllers
     public class OrdersController : Controller
     {
         private ShopDBEntities db = new ShopDBEntities();
+        private ProductRepository service = new ProductRepository();
         private string ApiUrl = WebConfigurationManager.AppSettings["XSIS.Shop.API"];
+
+        public List<OrderItemViewModel> ListItem = new List<OrderItemViewModel>();
 
         public ActionResult Index(string OrderNumber, string OrderDate, string CustomerId)
         {
@@ -124,6 +127,30 @@ namespace XSIS.Shop.WebApps.Controllers
 
             ViewBag.ProductId = new SelectList(resultProducts, "Id", "ProductName");
             return PartialView("_AddItem");
+        }
+
+        public ActionResult AddItemToCurrentOrder(int ProductId, int OrderQuantity)
+        {
+            if (Session["ListOrderItem"] != null)
+            {
+                ListItem = (List<OrderItemViewModel>)Session["ListOrderItem"];
+            }
+
+            var DetailProduct = service.GetProductById(ProductId);
+
+            ListItem.Add(new OrderItemViewModel
+            {
+                ProductId = DetailProduct.Id,
+                ProductName = DetailProduct.ProductName,
+                UnitPrice = DetailProduct.UnitPrice.HasValue ? DetailProduct.UnitPrice.Value : 0,
+                Quantity = OrderQuantity,
+                TotalAmount = (DetailProduct.UnitPrice.HasValue ? DetailProduct.UnitPrice.Value : 0) * OrderQuantity
+            });
+
+            Session["ListOrderItem"] = ListItem;
+            ViewBag.GrandTotal = ListItem.Sum(s => s.TotalAmount);
+
+            return PartialView("_ListOrderItem", ListItem);
         }
 
         [HttpPost]

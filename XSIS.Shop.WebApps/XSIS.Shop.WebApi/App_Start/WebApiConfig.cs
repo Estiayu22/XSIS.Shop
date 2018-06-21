@@ -32,6 +32,24 @@ namespace XSIS.Shop.WebApi
             );
 
             config.Routes.MapHttpRoute(
+                name: "OrderApi",
+                routeTemplate: "api/OrderApi/{id}",
+                defaults: new { controller = "OrderApi", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+               name: "OrderApi1Param",
+               routeTemplate: "api/OrderApi/{action}/{id}",
+               defaults: new { controller = "OrderApi", action = "get", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+              name: "OrderApi2Param",
+              routeTemplate: "api/OrderApi/{action}/{id}/{id2}",
+              defaults: new { controller = "OrderApi", action = "get", id = RouteParameter.Optional, id2 = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "ProductApi",
                 routeTemplate: "api/Product/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

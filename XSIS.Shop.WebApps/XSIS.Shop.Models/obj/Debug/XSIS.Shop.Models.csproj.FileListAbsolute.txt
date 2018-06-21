@@ -17,7 +17,6 @@ E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\bin\Debug\Entit
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\bin\Debug\EntityFramework.SqlServer.dll
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\bin\Debug\EntityFramework.xml
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\bin\Debug\EntityFramework.SqlServer.xml
-E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.Shop.Models.csprojAssemblyReference.cache
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.Shop.Models.csproj.CoreCompileInputs.cache
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.Shop.Models.csproj.CopyComplete
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.Shop.Models.dll

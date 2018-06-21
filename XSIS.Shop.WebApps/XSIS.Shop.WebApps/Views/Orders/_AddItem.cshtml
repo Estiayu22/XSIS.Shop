@@ -33,9 +33,37 @@
 </div>
 
 <div class="modal-footer">
-    <button type="button" class="btn btn-link">Add to Order</button>
-    <button type="button" class="btn btn-link" data-dismiss="modal">
+    <button type="button" id="item-add" class="btn btn-success">Add to Order</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">
         Close
     </button>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#item-add").click(function () {
+            var ProductId = $("#ProductId").val();
+            var OrderQuantity = $("#Quantity").val();
+
+            if (OrderQuantity > 0) {
+                $.ajax({
+                    type:"get",
+                    url: "@Url.Action("AddItemToCurrentOrder","Orders")",
+                    data: { "ProductId": ProductId, "OrderQuantity": OrderQuantity },
+                    dataType: 'html',
+                    success: function (data) {
+
+                        $("#modal-input").modal('hide');
+                        $("#tbl-orderitem").html(data);
+                    }
+                })
+            }
+            else
+            {
+                alert("Order Quantity harus lebih dari 0");
+            }
+
+        })
+    });
+</script>
 
