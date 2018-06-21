@@ -15,21 +15,33 @@ namespace XSIS.Shop.WebApi
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                name: "CustomerApi",
+                routeTemplate: "api/CustomerApi/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
-               name: "CustomMethodApi1Param",
-               routeTemplate: "api/{controller}/{action}/{id}",
+               name: "CustomerApi1Param",
+               routeTemplate: "api/CustomerApi/{action}/{id}",
                defaults: new { action = "get", id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
-              name: "CustomMethodApi2Param",
-              routeTemplate: "api/{controller}/{action}/{id}/{id2}",
+              name: "CustomerApi2Param",
+              routeTemplate: "api/CustomerApi/{action}/{id}/{id2}",
               defaults: new { action = "get", id = RouteParameter.Optional, id2 = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "ProductApi",
+                routeTemplate: "api/Product/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
             );
         }
     }

@@ -1,51 +1,102 @@
-﻿@model IEnumerable<XSIS.Shop.Models.Order>
+﻿@model IEnumerable<XSIS.Shop.ViewModels.OrderViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.SelectedHome = "";
+    ViewBag.SelectedCustomer = "";
+    ViewBag.SelectedSupplier = "";
+    ViewBag.SelectedProduct = "";
+    ViewBag.SelectedOrder = "active";
+    ViewBag.Title = "Index Order";
 }
 
-<h2>Index</h2>
+<div class="block-header">
+    <h2>List Order XSIS Shop</h2>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.OrderDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrderNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TotalAmount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Customer.FirstName)
-        </th>
-        <th></th>
-    </tr>
+@using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+{
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-mall"></i></span>
+                        <div class="fg-line">
+                            <input type="text" id="OrderNumber" name="OrderNumber" class="form-control" placeholder="Order Number">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="input-group form-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
+                        <div class="dtp-container">
+                            <input type="text" id="OrderDate" name="OrderDate" class="form-control date-picker"
+                                   placeholder="Order Date">
+                        </div>
+                    </div>
+                </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TotalAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Customer.FirstName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+                <div class="col-xs-3">
+                    @Html.DropDownList("CustomerId", null, "-- Pilih Customer --", htmlAttributes: new { @class = "form-control input-sm selectpicker" })
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-primary btn-sm m-t-10">Search</button>
+                    <a href="@Url.Action("Create", "Orders")" class="btn btn-info btn-sm m-t-10">New Order</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="data-table-basic" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Order Number
+                        </th>
+                        <th>
+                            Order Date
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Total Amount
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalAmount)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Details","Orders", new { id = item.Id })" class="btn btn-success"><i class="zmdi zmdi-search-for"></i></a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 
-</table>
+
+

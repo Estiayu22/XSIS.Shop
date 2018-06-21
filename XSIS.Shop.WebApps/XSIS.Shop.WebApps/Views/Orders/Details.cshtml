@@ -1,50 +1,121 @@
-﻿@model XSIS.Shop.Models.Order
+﻿@model XSIS.Shop.ViewModels.OrderViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.SelectedHome = "";
+    ViewBag.SelectedCustomer = "";
+    ViewBag.SelectedSupplier = "";
+    ViewBag.SelectedProduct = "";
+    ViewBag.SelectedOrder = "active";
+    ViewBag.Title = "Detail Order";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Order</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.OrderDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.OrderNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TotalAmount)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TotalAmount)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer.FirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Customer.FirstName)
-        </dd>
-
-    </dl>
+<div class="block-header">
+    <h2>Form Detail Existing Order</h2>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<div class="card">
+    <form class="form-horizontal" role="form">
+        <div class="card-header">
+            <h2>
+                Detail Order
+                <small>
+                    Form di bawah ini digunakan untuk melihat Detail Order.
+                </small>
+            </h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="pmb-block">
+                <div class="pmbb-body p-l-30">
+                    <div class="pmbb-view">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.OrderNumber)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.OrderNumber)
+                            </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.OrderDate)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.OrderDate)
+                            </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CustomerName)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.CustomerName)
+                            </dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>
+                                Detail Item
+                            </dt>
+                            <dd>
+
+                            </dd>
+                        </dl>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>
+                                        Product Name
+                                    </th>
+                                    <th>
+                                        Unit Price
+                                    </th>
+                                    <th>
+                                        Order Quantity
+                                    </th>
+                                    <th>
+                                        Total Amount
+                                    </th>
+                                </tr>
+
+                                @foreach (var item in Model.ListOrderItem)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProductName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UnitPrice)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Quantity)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TotalAmount)
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.TotalAmount)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.TotalAmount)
+                            </dd>
+                        </dl>
+
+
+                        <a href="@Url.Action("Index","Orders")" class="btn btn-info btn-sm m-t-10">Back to Index</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

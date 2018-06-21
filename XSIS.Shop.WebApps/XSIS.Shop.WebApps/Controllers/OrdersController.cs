@@ -6,6 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using XSIS.Shop.Repository;
+using XSIS.Shop.ViewModels;
+using System.Web.Configuration;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
+
 using XSIS.Shop.Models;
 
 namespace XSIS.Shop.WebApps.Controllers
@@ -13,11 +20,55 @@ namespace XSIS.Shop.WebApps.Controllers
     public class OrdersController : Controller
     {
         private ShopDBEntities db = new ShopDBEntities();
+        private string ApiUrl = WebConfigurationManager.AppSettings["XSIS.Shop.API"];
 
-        public ActionResult Index()
+        public ActionResult Index(string OrderNumber, string OrderDate, string CustomerId)
         {
-            var order = db.Order.Include(o => o.Customer);
-            return View(order.ToList());
+            // Get All Customer API Akses http://localhost:2099/api/CustomerApi/ without parameter
+            List<CustomerViewModel> resultCustomer = new List<CustomerViewModel>();
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string ListResult = response.Content.ReadAsStringAsync().Result.ToString();
+            resultCustomer = JsonConvert.DeserializeObject<List<CustomerViewModel>>(ListResult);
+
+            ViewBag.CustomerId = new SelectList(resultCustomer, "CustomerName", "CustomerName");
+
+            if (!string.IsNullOrEmpty(OrderDate) || !string.IsNullOrWhiteSpace(OrderDate))
+            {
+                OrderDate = OrderDate.Replace("/", "-");
+            }
+
+            List<OrderViewModel> list = null;
+            var result = list;
+
+            if (!string.IsNullOrEmpty(CustomerId) || !string.IsNullOrEmpty(OrderDate) || !string.IsNullOrEmpty(OrderNumber) ||
+                !string.IsNullOrWhiteSpace(CustomerId) || !string.IsNullOrWhiteSpace(OrderDate) || !string.IsNullOrWhiteSpace(OrderNumber)
+                || CustomerId != " " || OrderDate != " " || OrderNumber != " ")
+
+            {
+                // Get All Customer API Akses http://localhost:2099/api/OrderApi/OrderNumber/OrderDate/CustomerId with parameter
+                string ApiEndPoint1 = ApiUrl + "api/OrderApi/SearchByKey/" + (OrderNumber + "|" + OrderDate + "|" + CustomerId);
+                HttpClient client1 = new HttpClient();
+                HttpResponseMessage response1 = client1.GetAsync(ApiEndPoint1).Result;
+
+                string ListResult1 = response1.Content.ReadAsStringAsync().Result.ToString();
+                result = JsonConvert.DeserializeObject<List<OrderViewModel>>(ListResult1);
+            }
+            else
+            {
+                // Get All Customer API Akses http://localhost:2099/api/CustomerApi/ without parameter
+                string ApiEndPoint2 = ApiUrl + "api/OrderApi/";
+                HttpClient client2 = new HttpClient();
+                HttpResponseMessage response2 = client.GetAsync(ApiEndPoint2).Result;
+
+                string ListResult2 = response2.Content.ReadAsStringAsync().Result.ToString();
+                result = JsonConvert.DeserializeObject<List<OrderViewModel>>(ListResult2);
+            }
+
+            return View(result.ToList());
+
         }
 
         public ActionResult Details(int? id)
@@ -26,18 +77,53 @@ namespace XSIS.Shop.WebApps.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Order.Find(id);
-            if (order == null)
+
+            int idx = id.HasValue ? id.Value : 0;
+
+            // Details API Akses http://localhost:2099/api/OrderApi/1
+            string ApiEndPoint = ApiUrl + "api/OrderApi/" + idx;
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string result = response.Content.ReadAsStringAsync().Result.ToString();
+            OrderViewModel orderVM = JsonConvert.DeserializeObject<OrderViewModel>(result);
+
+            if (orderVM == null)
             {
                 return HttpNotFound();
             }
-            return View(order);
+
+            return View(orderVM);
         }
 
         public ActionResult Create()
         {
-            ViewBag.CustomerId = new SelectList(db.Customer, "Id", "FirstName");
+            // Get All Customer API Akses http://localhost:2099/api/CustomerApi/ without parameter
+            List<CustomerViewModel> resultCustomer = new List<CustomerViewModel>();
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string ListResult = response.Content.ReadAsStringAsync().Result.ToString();
+            resultCustomer = JsonConvert.DeserializeObject<List<CustomerViewModel>>(ListResult);
+
+            ViewBag.CustomerId = new SelectList(resultCustomer, "Id", "CustomerName");
             return View();
+        }
+
+        public ActionResult AddItem()
+        {
+            // Get All Product API Akses http://localhost:2099/api/GetAllProductDDL without parameter
+            List<ProductViewModel> resultProducts = new List<ProductViewModel>();
+            string ApiEndPoint = ApiUrl + "api/GetAllProductDDL";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string ListResult = response.Content.ReadAsStringAsync().Result.ToString();
+            resultProducts = JsonConvert.DeserializeObject<List<ProductViewModel>>(ListResult);
+
+            ViewBag.ProductId = new SelectList(resultProducts, "Id", "ProductName");
+            return PartialView("_AddItem");
         }
 
         [HttpPost]
@@ -53,59 +139,6 @@ namespace XSIS.Shop.WebApps.Controllers
 
             ViewBag.CustomerId = new SelectList(db.Customer, "Id", "FirstName", order.CustomerId);
             return View(order);
-        }
-
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order order = db.Order.Find(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CustomerId = new SelectList(db.Customer, "Id", "FirstName", order.CustomerId);
-            return View(order);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CustomerId = new SelectList(db.Customer, "Id", "FirstName", order.CustomerId);
-            return View(order);
-        }
-
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order order = db.Order.Find(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(order);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Order order = db.Order.Find(id);
-            db.Order.Remove(order);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

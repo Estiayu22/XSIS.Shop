@@ -79,7 +79,7 @@ namespace XSIS.Shop.Repository
                 List<OrderViewModel> ListOrders = db.Order.Include(p => p.Customer).Select(p => new OrderViewModel
                 {
                     Id = p.Id,
-                    OrderDate = p.OrderDate,
+                    OrderDate = p.OrderDate.ToString(),
                     OrderNumber = p.OrderNumber,
                     CustomerId = p.CustomerId,
                     CustomerName = (p.Customer.FirstName + " " + p.Customer.LastName),

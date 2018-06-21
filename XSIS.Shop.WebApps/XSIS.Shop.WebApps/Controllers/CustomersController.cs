@@ -18,7 +18,6 @@ namespace XSIS.Shop.WebApps.Controllers
     public class CustomersController : Controller
     {
         private string ApiUrl = WebConfigurationManager.AppSettings["XSIS.Shop.API"];
-        private CustomerRepository service = new CustomerRepository();
 
         [HttpGet]
         public ActionResult Index(string FullName, string CityCountry, string Email)
@@ -31,7 +30,6 @@ namespace XSIS.Shop.WebApps.Controllers
                 || FullName != " " || CityCountry != " " || Email != " ")
 
             {
-                result = service.SearchByKey(FullName, CityCountry, Email);
                 // Get All Customer API Akses http://localhost:2099/api/CustomerApi/FullName/CityCountry/Email with parameter
                 string ApiEndPoint = ApiUrl + "api/CustomerApi/SearchByKey/" + (FullName + "|" + CityCountry + "|" + Email);
                 HttpClient client = new HttpClient();

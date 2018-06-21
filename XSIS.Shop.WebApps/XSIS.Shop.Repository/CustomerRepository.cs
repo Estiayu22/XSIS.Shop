@@ -30,6 +30,7 @@ namespace XSIS.Shop.Repository
                     custVM.Country = item.Country;
                     custVM.Phone = item.Phone;
                     custVM.Email = item.Email;
+                    custVM.CustomerName = item.FirstName + " " + item.LastName;
                     ListVM.Add(custVM);
                 }
 

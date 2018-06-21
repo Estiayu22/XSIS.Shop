@@ -46,5 +46,7 @@ namespace XSIS.Shop.ViewModels
         [EmailAddress(ErrorMessage = "Format penulisan e-mail tidak valid.")]
         [StringLength(40, ErrorMessage = "Panjang karakter Alamat E-mail maksimal 35.")]
         public string Email { get; set; }
+
+        public string CustomerName { get; set; }
     }
 }
