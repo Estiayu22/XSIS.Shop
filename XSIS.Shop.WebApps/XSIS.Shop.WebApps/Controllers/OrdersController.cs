@@ -113,9 +113,9 @@ namespace XSIS.Shop.WebApps.Controllers
 
         public ActionResult AddItem()
         {
-            // Get All Product API Akses http://localhost:2099/api/GetAllProductDDL without parameter
+            // Get All Product API Akses http://localhost:2099//api/Product/GetAllProductDDL without parameter
             List<ProductViewModel> resultProducts = new List<ProductViewModel>();
-            string ApiEndPoint = ApiUrl + "api/GetAllProductDDL";
+            string ApiEndPoint = ApiUrl + "/api/Product/GetAllProductDDL";
             HttpClient client = new HttpClient();
             HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
 
