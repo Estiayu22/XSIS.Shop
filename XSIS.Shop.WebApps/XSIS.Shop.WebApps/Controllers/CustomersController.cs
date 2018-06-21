@@ -62,7 +62,7 @@ namespace XSIS.Shop.WebApps.Controllers
             int idx = id.HasValue ? id.Value : 0;
 
             // Details API Akses http://localhost:2099/api/CustomerApi/1
-            string ApiEndPoint = ApiUrl + "api/CustomerApi/" + idx;
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/Get/" + idx;
             HttpClient client = new HttpClient();
             HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
 
@@ -168,7 +168,7 @@ namespace XSIS.Shop.WebApps.Controllers
             int idx = id.HasValue ? id.Value : 0;
 
             // Details API Akses http://localhost:2099/api/CustomerApi/1
-            string ApiEndPoint = ApiUrl + "api/CustomerApi/" + idx;
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/Get/" + idx;
             HttpClient client = new HttpClient();
             HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
 
@@ -227,7 +227,7 @@ namespace XSIS.Shop.WebApps.Controllers
             int idx = id.HasValue ? id.Value : 0;
 
             // Details API Akses http://localhost:2099/api/CustomerApi/1
-            string ApiEndPoint = ApiUrl + "api/CustomerApi/" + idx;
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/Get/" + idx;
             HttpClient client = new HttpClient();
             HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
 
