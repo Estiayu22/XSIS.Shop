@@ -62,17 +62,29 @@ namespace XSIS.Shop.Repository
         {
             using (ShopDBEntities db = new ShopDBEntities())
             {
-                Customer model = new Customer();
+                using (var dbContextTransaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Customer model = new Customer();
 
-                model.FirstName = customer.FirstName;
-                model.LastName = customer.LastName;
-                model.City = customer.City;
-                model.Country = customer.Country;
-                model.Phone = customer.Phone;
-                model.Email = customer.Email;
+                        model.FirstName = customer.FirstName;
+                        model.LastName = customer.LastName;
+                        model.City = customer.City;
+                        model.Country = customer.Country;
+                        model.Phone = customer.Phone;
+                        model.Email = customer.Email;
 
-                db.Customer.Add(model);
-                db.SaveChanges();
+                        db.Customer.Add(model);
+                        db.SaveChanges();
+
+                        dbContextTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbContextTransaction.Rollback();
+                    }
+                }
             }
         }
 
