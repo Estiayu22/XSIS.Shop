@@ -14,9 +14,39 @@
         </td>
         <td>
             Rp. @Html.DisplayFor(modelItem => item.TotalAmount)
+            <input type="hidden" class="amount" value="@item.TotalAmount" />
         </td>
         <td>
             <button class="btn btn-danger btn-hapus" id="@item.ProductId">Remove</button>
         </td>
     </tr>
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var sum = 0;
+
+        $('.amount').each(function () {
+            var price = $(this);
+            sum += parseInt(price.val());
+        });
+
+        $("#TotalAmount").val(sum);
+
+        $(".btn-hapus").click(function () {
+            var Id = $(this).attr("id");
+            $.ajax({
+                type:'get',
+                url:'@Url.Action("RemoveItemFromCurrentOrder", "Orders")',
+                data: { ProductId: Id },
+                dataType: 'html',
+                success: function (data) {
+                    $("#tbl-orderitem").html(data);
+                }
+            })
+
+            return false;
+        });
+    });
+
+</script>

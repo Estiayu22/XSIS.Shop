@@ -13,6 +13,7 @@ namespace XSIS.Shop.ViewModels
         [Display(Name = "Order Date")]
         public string OrderDate { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public System.DateTime OrderDateFormat { get; set; }
 
         [Display(Name = "Order Number")]

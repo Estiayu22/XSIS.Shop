@@ -149,8 +149,7 @@ namespace XSIS.Shop.Repository
                         else
                         {
                             OrderDate = OrderDate.Replace("-", "/");
-                            string[] formats = { "dd/MM/yyyy" };
-                            DateTime oDate = DateTime.ParseExact(OrderDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
+                            DateTime oDate = DateTime.ParseExact(OrderDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                             listVM = (from listOrd in db.Order
                                       join listCust in db.Customer on listOrd.CustomerId equals listCust.Id
                                       where (listCust.FirstName.ToLower().Contains(firstName.ToLower()) || listCust.LastName.ToLower().Contains(lastName.ToLower())) ||
@@ -188,8 +187,7 @@ namespace XSIS.Shop.Repository
                         else
                         {
                             OrderDate = OrderDate.Replace("-", "/");
-                            string[] formats = { "dd/MM/yyyy" };
-                            DateTime oDate = DateTime.ParseExact(OrderDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
+                            DateTime oDate = DateTime.ParseExact(OrderDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                             listVM = (from listOrd in db.Order
                                       join listCust in db.Customer on listOrd.CustomerId equals listCust.Id
                                       where (listOrd.OrderDate == oDate) || (listOrd.OrderNumber.ToLower().Contains(OrderNumber.ToLower()))
@@ -295,25 +293,24 @@ namespace XSIS.Shop.Repository
                         }
                         else
                         {
-                            (from listOrd in db.Order
-                             join listCust in db.Customer on listOrd.CustomerId equals listCust.Id
-                             select new OrderViewModel
-                             {
-                                 Id = listOrd.Id,
-                                 OrderDate = listOrd.OrderDate.ToString(),
-                                 OrderDateFormat = listOrd.OrderDate,
-                                 OrderNumber = listOrd.OrderNumber,
-                                 CustomerName = listCust.FirstName + " " + listCust.LastName,
-                                 CustomerId = listOrd.CustomerId,
-                                 TotalAmount = listOrd.TotalAmount,
-                             }).ToList();
+                            listVM = (from listOrd in db.Order
+                                     join listCust in db.Customer on listOrd.CustomerId equals listCust.Id
+                                     select new OrderViewModel
+                                     {
+                                         Id = listOrd.Id,
+                                         OrderDate = listOrd.OrderDate.ToString(),
+                                         OrderDateFormat = listOrd.OrderDate,
+                                         OrderNumber = listOrd.OrderNumber,
+                                         CustomerName = listCust.FirstName + " " + listCust.LastName,
+                                         CustomerId = listOrd.CustomerId,
+                                         TotalAmount = listOrd.TotalAmount,
+                                     }).ToList();
                         }
                     }
                     else
                     {
                         OrderDate = OrderDate.Replace("-", "/");
-                        string[] formats = { "dd/MM/yyyy" };
-                        DateTime oDate = DateTime.ParseExact(OrderDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
+                        DateTime oDate = DateTime.ParseExact(OrderDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         if (!string.IsNullOrEmpty(OrderNumber) && !string.IsNullOrEmpty(CustomerId))
                         {
                             listVM = (from listOrd in db.Order
@@ -366,19 +363,19 @@ namespace XSIS.Shop.Repository
                         }
                         else
                         {
-                            (from listOrd in db.Order
-                             join listCust in db.Customer on listOrd.CustomerId equals listCust.Id
-                             where (listOrd.OrderDate == oDate)
-                             select new OrderViewModel
-                             {
-                                 Id = listOrd.Id,
-                                 OrderDate = listOrd.OrderDate.ToString(),
-                                 OrderDateFormat = listOrd.OrderDate,
-                                 OrderNumber = listOrd.OrderNumber,
-                                 CustomerName = listCust.FirstName + " " + listCust.LastName,
-                                 CustomerId = listOrd.CustomerId,
-                                 TotalAmount = listOrd.TotalAmount,
-                             }).ToList();
+                            listVM =  (from listOrd in db.Order
+                                     join listCust in db.Customer on listOrd.CustomerId equals listCust.Id
+                                     where (listOrd.OrderDate == oDate)
+                                     select new OrderViewModel
+                                     {
+                                         Id = listOrd.Id,
+                                         OrderDate = listOrd.OrderDate.ToString(),
+                                         OrderDateFormat = listOrd.OrderDate,
+                                         OrderNumber = listOrd.OrderNumber,
+                                         CustomerName = listCust.FirstName + " " + listCust.LastName,
+                                         CustomerId = listOrd.CustomerId,
+                                         TotalAmount = listOrd.TotalAmount,
+                                     }).ToList();
                         }
                     }
                 }
@@ -406,8 +403,7 @@ namespace XSIS.Shop.Repository
                         else
                         {
                             OrderDate = OrderDate.Replace("-", "/");
-                            string[] formats = { "dd/MM/yyyy" };
-                            DateTime oDate = DateTime.ParseExact(OrderDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
+                            DateTime oDate = DateTime.ParseExact(OrderDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                             listVM = (from listOrd in db.Order
                                       join listCust in db.Customer on listOrd.CustomerId equals listCust.Id
                                       where (listCust.FirstName.ToLower().Contains(firstName.ToLower()) || listCust.LastName.ToLower().Contains(lastName.ToLower())) ||
@@ -462,8 +458,7 @@ namespace XSIS.Shop.Repository
                         else
                         {
                             OrderDate = OrderDate.Replace("-", "/");
-                            string[] formats = { "dd/MM/yyyy" };
-                            DateTime oDate = DateTime.ParseExact(OrderDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
+                            DateTime oDate = DateTime.ParseExact(OrderDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                             listVM = (from listOrd in db.Order
                                       join listCust in db.Customer on listOrd.CustomerId equals listCust.Id
                                       where (listCust.FirstName.ToLower().Contains(firstName.ToLower()) || listCust.LastName.ToLower().Contains(lastName.ToLower())) ||

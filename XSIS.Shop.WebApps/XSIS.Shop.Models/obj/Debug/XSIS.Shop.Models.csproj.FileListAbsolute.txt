@@ -21,3 +21,4 @@ E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.Shop.Models.csproj.CopyComplete
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.Shop.Models.dll
 E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.Shop.Models.pdb
+E:\Project\XSIS\Git\XSIS.Shop\XSIS.Shop.WebApps\XSIS.Shop.Models\obj\Debug\XSIS.Shop.Models.csprojAssemblyReference.cache

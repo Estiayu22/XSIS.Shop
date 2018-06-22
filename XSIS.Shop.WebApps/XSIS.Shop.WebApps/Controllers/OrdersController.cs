@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
 using XSIS.Shop.Models;
+using System.Globalization;
 
 namespace XSIS.Shop.WebApps.Controllers
 {
@@ -84,7 +85,7 @@ namespace XSIS.Shop.WebApps.Controllers
             int idx = id.HasValue ? id.Value : 0;
 
             // Details API Akses http://localhost:2099/api/OrderApi/1
-            string ApiEndPoint = ApiUrl + "api/OrderApi/" + idx;
+            string ApiEndPoint = ApiUrl + "api/OrderApi/Get/" + idx;
             HttpClient client = new HttpClient();
             HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
 
@@ -147,21 +148,107 @@ namespace XSIS.Shop.WebApps.Controllers
                 TotalAmount = (DetailProduct.UnitPrice.HasValue ? DetailProduct.UnitPrice.Value : 0) * OrderQuantity
             });
 
-            Session["ListOrderItem"] = ListItem;
-            ViewBag.GrandTotal = ListItem.Sum(s => s.TotalAmount);
+            var ListItemCount = GroupListItem(ListItem);
+            Session["ListOrderItem"] = ListItemCount;
 
-            return PartialView("_ListOrderItem", ListItem);
+            ViewBag.GrandTotal = ListItemCount.Sum(s => s.TotalAmount);
+            return PartialView("_ListOrderItem", ListItemCount);
+        }
+
+        public List<OrderItemViewModel> GroupListItem(List<OrderItemViewModel> ListItem)
+        {
+            var CountVarian = (ListItem.GroupBy(x => x.ProductId).Select(a => new OrderItemViewModel
+            {
+                ProductId = a.Key,
+                ProductName = a.First().ProductName,
+                UnitPrice = a.First().UnitPrice,
+                Quantity = a.Sum(s => s.Quantity),
+                TotalAmount = a.Sum(s => s.TotalAmount)
+            })).ToList();
+            return CountVarian;
+        }
+
+        public ActionResult RemoveItemFromCurrentOrder(int ProductId)
+        {
+            if (Session["ListOrderItem"] != null)
+            {
+                ListItem = (List<OrderItemViewModel>)Session["ListOrderItem"];
+            }
+
+            var RemoveItemvarian = RemoveItem(ProductId, ListItem);
+            Session["ListOrderItem"] = RemoveItemvarian;
+            ViewBag.GrandTotal = RemoveItemvarian.Sum(s => s.TotalAmount);
+            return PartialView("_ListOrderItem", RemoveItemvarian);
+        }
+
+        public List<OrderItemViewModel> RemoveItem(int ProductId, List<OrderItemViewModel> ListItem)
+        {
+            for (int i = 0; i < ListItem.Count; i++)
+            {
+                if (ListItem[i].ProductId == ProductId)
+                {
+                    ListItem.Remove(ListItem[i]);
+                    break;
+                }
+            }
+            return ListItem;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Order order)
+        public ActionResult Create(OrderViewModel order)
         {
             if (ModelState.IsValid)
             {
-                db.Order.Add(order);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (Session["ListOrderItem"] == null)
+                {
+                    ModelState.AddModelError("", "List order item tidak boleh kosong.");
+                    return View(order);
+                }
+                else
+                {
+                    // Generate Order Number
+                    string OrderNum = string.Empty;
+                    int latestID = db.Order.OrderByDescending(x => x.Id).Select(x => x.Id).FirstOrDefault();
+
+                    if(latestID < 10)
+                    {
+                        OrderNum = "ORD" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + "00" + latestID;
+                    }
+                    else
+                    {
+                        OrderNum = "ORD" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + "0" + latestID;
+                    }
+
+                    ListItem = (List<OrderItemViewModel>)Session["ListOrderItem"];
+
+                    string[] formats = { "dd/MM/yyyy" };
+                    DateTime oDate = DateTime.ParseExact(order.OrderDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
+
+                    Order model = new Order();
+                    model.CustomerId = order.CustomerId;
+                    model.OrderDate = oDate;
+                    model.OrderNumber = OrderNum;
+                    model.TotalAmount = order.TotalAmount;
+
+                    db.Order.Add(model);
+                    db.SaveChanges();
+
+                    foreach(var item in ListItem)
+                    {
+                        OrderItem modelItem = new OrderItem();
+                        modelItem.OrderId = model.Id;
+                        modelItem.ProductId = item.ProductId;
+                        modelItem.Quantity = item.Quantity;
+                        modelItem.UnitPrice = item.UnitPrice;
+
+                        db.OrderItem.Add(modelItem);
+                        db.SaveChanges();
+
+                    }
+                    return RedirectToAction("Index");
+                }
+
             }
 
             ViewBag.CustomerId = new SelectList(db.Customer, "Id", "FirstName", order.CustomerId);

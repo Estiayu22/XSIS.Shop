@@ -39,7 +39,7 @@
     </button>
 </div>
 
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
         $("#item-add").click(function () {
             var ProductId = $("#ProductId").val();
@@ -52,11 +52,12 @@
                     data: { "ProductId": ProductId, "OrderQuantity": OrderQuantity },
                     dataType: 'html',
                     success: function (data) {
-
                         $("#modal-input").modal('hide');
                         $("#tbl-orderitem").html(data);
                     }
                 })
+
+                return false;
             }
             else
             {
