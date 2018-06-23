@@ -1,39 +1,23 @@
 ﻿@model XSIS.Shop.ViewModels.SupplierViewModel
 
-@{
-    ViewBag.SelectedHome = "";
-    ViewBag.SelectedCustomer = "";
-    ViewBag.SelectedSupplier = "active";
-    ViewBag.SelectedProduct = "";
-    ViewBag.SelectedOrder = "";
-    ViewBag.Title = "Edit Supplier";
-}
-
 <style>
     .error {
         color: red;
     }
 </style>
 
-<div class="block-header">
-    <h2>Form Create Edit Existing Supplier</h2>
+<div class="modal-header">
+    <h4 class="modal-title">Edit Existing Supplier</h4>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <h2>
-            Edit Existing Supplier
-            <small>
-                Form di bawah ini digunakan untuk mengedit data supplier yang sudah ada sebelumnya.
-            </small>
-        </h2>
-    </div>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true, "", new { @class = "error" })
-        @Html.HiddenFor(model => model.Id)
+@using (Html.BeginForm("Edit", "Suppliers", null, FormMethod.Post, new { id = "form-input-supplier" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="card-header">
+            @Html.ValidationSummary(true, "", new { @class = "error" })
+            @Html.HiddenFor(model => model.Id)
+        </div>
 
         <div class="card-body card-padding">
             <div class="form-group">
@@ -85,12 +69,10 @@
                 </div>
                 @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "error" })
             </div>
-            <a href="@Url.Action("Index","Suppliers")" class="btn btn-info btn-sm m-t-10">Back to Index</a>
-            <button type="submit" class="btn btn-primary btn-sm m-t-10">Update</button>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm m-t-10">Save</button>
+                <button type="button" id="btn-close" class="btn btn-default btn-sm m-t-10" data-dismiss="modal">Cancel</button>
+            </div>
         </div>
-    }
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    </div>
 }

@@ -37,6 +37,12 @@ namespace XSIS.Shop.WebApps.Controllers
             return View(result.ToList());
         }
 
+        public ActionResult List()
+        {
+            string search = string.Empty;
+            return PartialView("_List", service.GetAllSupplier().ToList());
+        }
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -52,12 +58,12 @@ namespace XSIS.Shop.WebApps.Controllers
                 return HttpNotFound();
             }
 
-            return View(supplier);
+            return PartialView("_Details", supplier);
         }
 
         public ActionResult Create()
         {
-            return View();
+            return PartialView("_Create");
         }
 
         [HttpPost]
@@ -66,11 +72,19 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                service.AddNewSupplier(supplier);
-                return RedirectToAction("Index");
+                try
+                {
+                    service.AddNewSupplier(supplier);
+                    return Json(new { success = true, from = "create" }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception e)
+                {
+                    return Json(new { success = false, msg = e.Message }, JsonRequestBehavior.AllowGet);
+                }
+
             }
 
-            return View(supplier);
+            return PartialView("_Create", supplier);
         }
 
         public ActionResult Edit(int? id)
@@ -88,7 +102,7 @@ namespace XSIS.Shop.WebApps.Controllers
                 return HttpNotFound();
             }
 
-            return View(supplier);
+            return PartialView("_Edit",supplier);
         }
 
         [HttpPost]
@@ -97,11 +111,18 @@ namespace XSIS.Shop.WebApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                service.UpdateSupplier(supplier);
-                return RedirectToAction("Index");
+                try
+                {
+                    service.UpdateSupplier(supplier);
+                    return Json(new { success = true, from = "edit" }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception e)
+                {
+                    return Json(new { success = false, msg = e.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
 
-            return View(supplier);
+            return PartialView("_Edit", supplier);
         }
 
         public ActionResult Delete(int? id)
@@ -119,15 +140,22 @@ namespace XSIS.Shop.WebApps.Controllers
                 return HttpNotFound();
             }
 
-            return View(supplier);
+            return PartialView("_Delete", supplier);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            service.DeleteSupplier(id);
-            return RedirectToAction("Index");
+            try
+            {
+                service.DeleteSupplier(id);
+                return Json(new { success = true, from = "delete" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, msg = e.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

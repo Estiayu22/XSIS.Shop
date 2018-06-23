@@ -13,80 +13,239 @@
     <h2>List Supplier XSIS Shop</h2>
 </div>
 
-
-<div class="card">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-xs-3">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-                    <div class="fg-line">
-                        <input type="text" id="FullName" name="FullName" class="form-control" placeholder="Full Name/Employee">
+@using (Html.BeginForm("Index", "Suppliers", FormMethod.Get))
+{
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <div class="fg-line">
+                            <input type="text" id="FullName" name="FullName" class="form-control" placeholder="Full Name/Employee">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="zmdi zmdi-pin"></i></span>
-                    <div class="fg-line">
-                        <input type="text" id="CityCountry" name="CityCountry" class="form-control" placeholder="City/Country">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-pin"></i></span>
+                        <div class="fg-line">
+                            <input type="text" id="CityCountry" name="CityCountry" class="form-control" placeholder="City/Country">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
-                    <div class="fg-line">
-                        <input type="text" id="PhoneNo" name="PhoneNo" class="form-control" placeholder="Phone No.">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                        <div class="fg-line">
+                            <input type="text" id="PhoneNo" name="PhoneNo" class="form-control" placeholder="Phone No.">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-3">
-                <button type="submit" class="btn btn-primary btn-sm m-t-10">Search</button>
-                <a href="@Url.Action("Create", "Suppliers")" class="btn btn-info btn-sm m-t-10">Create</a>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-primary btn-sm m-t-10">Search</button>
+                    <button class="btn btn-info btn-sm m-t-10" id="btn-create">Create</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="table-responsive">
-        <table id="data-table-basic" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Nama Perusahaan</th>
-                    <th>@Html.DisplayNameFor(model => model.ContactName)</th>
-                    <th>@Html.DisplayNameFor(model => model.City)</th>
-                    <th>@Html.DisplayNameFor(model => model.Country)</th>
-                    <th>@Html.DisplayNameFor(model => model.Phone)</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CompanyName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ContactName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Country)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Phone)
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Edit","Suppliers", new { id = item.Id })" class="btn btn-info"><i class="zmdi zmdi-edit"></i></a>
-                        <a href="@Url.Action("Details","Suppliers", new { id = item.Id })" class="btn btn-success"><i class="zmdi zmdi-search-for"></i></a>
-                        <a href="@Url.Action("Delete","Suppliers", new { id = item.Id })" class="btn btn-danger"><i class="zmdi zmdi-delete"></i></a>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="data-table-basic" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Perusahaan</th>
+                        <th>@Html.DisplayNameFor(model => model.ContactName)</th>
+                        <th>@Html.DisplayNameFor(model => model.City)</th>
+                        <th>@Html.DisplayNameFor(model => model.Country)</th>
+                        <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="table-supplier">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CompanyName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ContactName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.City)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Country)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Phone)
+                            </td>
+                            <td>
+                                <button class="btn btn-info btnEdit" value="@item.Id"><i class="zmdi zmdi-edit"></i></button>
+                                <button class="btn btn-success btnDetails" value="@item.Id"><i class="zmdi zmdi-search-for"></i></button>
+                                <button class="btn btn-danger btnDelete" value="@item.Id"><i class="zmdi zmdi-delete"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="modal-input" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div id="modal-data" class="modal-content">
+        </div>
     </div>
 </div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btn-create").click(function () {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("Create", "Suppliers")',
+                dataType: 'html',
+                success: function (data) {
+                    $("#modal-data").html(data);
+                    $("#modal-input").modal('show');
+                }
+            });
+
+            return false;
+        });
+
+        $("#table-supplier").on('click', '.btnDetails', function (e) {
+            e.preventDefault();
+            var idDetails = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Details", "Suppliers")",
+                data: { id: idDetails },
+                dataType: "html",
+                success: function(data)
+                {
+                    $("#modal-data").html(data);
+                    $("#modal-input").modal('show');
+                }
+            });
+
+            return false;
+        });
+
+        $("#table-supplier").on('click', '.btnEdit', function (e) {
+            e.preventDefault();
+            var idDetails = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Edit", "Suppliers")",
+                data: { id: idDetails },
+                dataType: "html",
+                success: function(data)
+                {
+                    $("#modal-data").html(data);
+                    $("#modal-input").modal('show');
+                }
+            });
+
+            return false;
+        });
+
+        $("#table-supplier").on('click', '.btnDelete', function (e) {
+            e.preventDefault();
+            var idDetails = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Delete", "Suppliers")",
+                data: { id: idDetails },
+                dataType: "html",
+                success: function(data)
+                {
+                    $("#modal-data").html(data);
+                    $("#modal-input").modal('show');
+                }
+            });
+
+            return false;
+        });
+
+        $("#modal-input").on("submit", "#form-input-supplier", function (e) {
+            e.preventDefault();
+
+            var Action = $(this).attr("action");
+            var Method = $(this).attr("method");
+            var Data = $(this).serialize();
+
+            $.ajax({
+                type: Method,
+                url: Action,
+                data: Data,
+                success: function(data)
+                {
+                    if (data.success == true) {
+                        if (data.from == "create") {
+                            $("#modal-input").modal("hide");
+                            swal({
+                                title: "Good Job!",
+                                text: "Sukses simpan",
+                                type: "success",
+                                timer: 1500
+                            });
+                            listReload();
+                        }
+                        else if (data.from == "edit") {
+                            $("#modal-input").modal("hide");
+                            swal({
+                                title: "Good Job!",
+                                text: "Sukses update",
+                                type: "success",
+                                timer: 1500
+                            });
+                            listReload();
+                        }
+                        else if (data.from == "delete") {
+                            $("#modal-input").modal("hide");
+                            swal({
+                                title: "Good Job!",
+                                text: "Sukses delete",
+                                type: "success",
+                                timer: 1500
+                            });
+                        }
+                    }
+                    else if (data.success == false) {
+                        $("#modal-input").modal("hide");
+                        swal("Failed!", data.msg, "error")
+                        swal({
+                            title: "Failed!",
+                            text: data.msg,
+                            type: "error",
+                            timer: 1500
+                        });
+                        listReload();
+                    }
+                    else {
+                        $("#modal-data").html(data);
+                    }
+                }
+            });
+
+            return false;
+        });
+
+        function listReload() {
+            $.ajax({
+                url: "@Url.Action("List", "Suppliers")",
+                type: "get",
+                success: function (result) {
+                    $("#table-supplier").html(result);
+                }
+            });
+        }
+    });
+    </script>
+}

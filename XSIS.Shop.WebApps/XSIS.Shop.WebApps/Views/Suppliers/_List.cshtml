@@ -1,0 +1,27 @@
+﻿@model IEnumerable<XSIS.Shop.ViewModels.SupplierViewModel>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContactName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            <button class="btn btn-info btnEdit" value="@item.Id"><i class="zmdi zmdi-edit"></i></button>
+            <button class="btn btn-success btnDetails" value="@item.Id"><i class="zmdi zmdi-search-for"></i></button>
+            <button class="btn btn-danger btnDelete" value="@item.Id"><i class="zmdi zmdi-delete"></i></button>
+        </td>
+    </tr>
+}
