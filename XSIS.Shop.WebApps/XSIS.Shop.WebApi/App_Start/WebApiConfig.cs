@@ -12,13 +12,6 @@ namespace XSIS.Shop.WebApi
             // Web API configuration and services
 
             // Web API routes
-
-            config.Routes.MapHttpRoute(
-                name: "CustomerApi",
-                routeTemplate: "api/CustomerApi/{id}",
-                defaults: new {controller = "CustomerApi", id = RouteParameter.Optional }
-            );
-
             config.Routes.MapHttpRoute(
                name: "CustomerApi1Param",
                routeTemplate: "api/CustomerApi/{action}/{id}",
@@ -32,9 +25,9 @@ namespace XSIS.Shop.WebApi
             );
 
             config.Routes.MapHttpRoute(
-                name: "OrderApi",
-                routeTemplate: "api/OrderApi/{id}",
-                defaults: new { controller = "OrderApi", id = RouteParameter.Optional }
+                name: "CustomerApi",
+                routeTemplate: "api/CustomerApi/{id}",
+                defaults: new { controller = "CustomerApi", id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
@@ -47,6 +40,24 @@ namespace XSIS.Shop.WebApi
               name: "OrderApi2Param",
               routeTemplate: "api/OrderApi/{action}/{id}/{id2}",
               defaults: new { controller = "OrderApi", action = "get", id = RouteParameter.Optional, id2 = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+               name: "OrderApiPost1Param",
+               routeTemplate: "api/OrderApi/{action}/{id}",
+               defaults: new { controller = "OrderApi", action = "post", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+              name: "OrderApiPost2Param",
+              routeTemplate: "api/OrderApi/{action}/{id}/{id2}",
+              defaults: new { controller = "OrderApi", action = "post", id = RouteParameter.Optional, id2 = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "OrderApi",
+                routeTemplate: "api/OrderApi/{id}",
+                defaults: new { controller = "OrderApi", id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(

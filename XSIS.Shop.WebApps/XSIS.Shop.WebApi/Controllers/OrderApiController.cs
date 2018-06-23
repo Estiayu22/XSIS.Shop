@@ -40,5 +40,40 @@ namespace XSIS.Shop.WebApi.Controllers
             var result = service.GetDetailOrderById(id);
             return result;
         }
+
+        [HttpPost]
+        public List<OrderItemViewModel> GroupListItem(List<OrderItemViewModel> ListItem)
+        {
+            var result = service.GroupListItem(ListItem);
+            return result;
+        }
+
+        [HttpPost]
+        public List<OrderItemViewModel> RemoveItem(OrderRemoveViewModel OrderRemoveItem)
+        {
+            var result = service.RemoveItem(OrderRemoveItem);
+            return result;
+        }
+
+        [HttpGet]
+        public int GetLatestOrderID()
+        {
+            var result = service.GetLatestOrderID();
+            return result;
+        }
+
+        [HttpPost]
+        public int Post(OrderViewModel order)
+        {
+            try
+            {
+                service.AddNewOrder(order);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
     }
 }

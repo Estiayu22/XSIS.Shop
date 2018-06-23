@@ -49,4 +49,10 @@ namespace XSIS.Shop.ViewModels
         [Display(Name = "Total Amount")]
         public Decimal TotalAmount { get; set; }
     }
+
+    public class OrderRemoveViewModel
+    {
+        public int ProductId { get; set; }
+        public List<OrderItemViewModel> ListOrderItem { get; set; }
+    }
 }

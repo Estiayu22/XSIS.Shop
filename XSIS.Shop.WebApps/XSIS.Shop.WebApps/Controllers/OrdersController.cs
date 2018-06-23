@@ -20,15 +20,11 @@ namespace XSIS.Shop.WebApps.Controllers
 {
     public class OrdersController : Controller
     {
-        private ShopDBEntities db = new ShopDBEntities();
-        private ProductRepository service = new ProductRepository();
         private string ApiUrl = WebConfigurationManager.AppSettings["XSIS.Shop.API"];
-
         public List<OrderItemViewModel> ListItem = new List<OrderItemViewModel>();
 
         public ActionResult Index(string OrderNumber, string OrderDate, string CustomerId)
         {
-            // Get All Customer API Akses http://localhost:2099/api/CustomerApi/ without parameter
             List<CustomerViewModel> resultCustomer = new List<CustomerViewModel>();
             string ApiEndPoint = ApiUrl + "api/CustomerApi/";
             HttpClient client = new HttpClient();
@@ -52,7 +48,6 @@ namespace XSIS.Shop.WebApps.Controllers
                 || CustomerId != " " || OrderDate != " " || OrderNumber != " ")
 
             {
-                // Get All Customer API Akses http://localhost:2099/api/OrderApi/OrderNumber/OrderDate/CustomerId with parameter
                 string ApiEndPoint1 = ApiUrl + "api/OrderApi/SearchByKey/" + (OrderNumber + "|" + OrderDate + "|" + CustomerId);
                 HttpClient client1 = new HttpClient();
                 HttpResponseMessage response1 = client1.GetAsync(ApiEndPoint1).Result;
@@ -62,10 +57,9 @@ namespace XSIS.Shop.WebApps.Controllers
             }
             else
             {
-                // Get All Customer API Akses http://localhost:2099/api/CustomerApi/ without parameter
                 string ApiEndPoint2 = ApiUrl + "api/OrderApi/";
                 HttpClient client2 = new HttpClient();
-                HttpResponseMessage response2 = client.GetAsync(ApiEndPoint2).Result;
+                HttpResponseMessage response2 = client2.GetAsync(ApiEndPoint2).Result;
 
                 string ListResult2 = response2.Content.ReadAsStringAsync().Result.ToString();
                 result = JsonConvert.DeserializeObject<List<OrderViewModel>>(ListResult2);
@@ -84,7 +78,6 @@ namespace XSIS.Shop.WebApps.Controllers
 
             int idx = id.HasValue ? id.Value : 0;
 
-            // Details API Akses http://localhost:2099/api/OrderApi/1
             string ApiEndPoint = ApiUrl + "api/OrderApi/Get/" + idx;
             HttpClient client = new HttpClient();
             HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
@@ -102,7 +95,6 @@ namespace XSIS.Shop.WebApps.Controllers
 
         public ActionResult Create()
         {
-            // Get All Customer API Akses http://localhost:2099/api/CustomerApi/ without parameter
             List<CustomerViewModel> resultCustomer = new List<CustomerViewModel>();
             string ApiEndPoint = ApiUrl + "api/CustomerApi/";
             HttpClient client = new HttpClient();
@@ -117,7 +109,6 @@ namespace XSIS.Shop.WebApps.Controllers
 
         public ActionResult AddItem()
         {
-            // Get All Product API Akses http://localhost:2099//api/Product/GetAllProductDDL without parameter
             List<ProductViewModel> resultProducts = new List<ProductViewModel>();
             string ApiEndPoint = ApiUrl + "/api/Product/GetAllProductDDL";
             HttpClient client = new HttpClient();
@@ -137,7 +128,12 @@ namespace XSIS.Shop.WebApps.Controllers
                 ListItem = (List<OrderItemViewModel>)Session["ListOrderItem"];
             }
 
-            var DetailProduct = service.GetProductById(ProductId);
+            string ApiEndPoint = ApiUrl + "api/Product/GetProductById/" + ProductId;
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string ListResult = response.Content.ReadAsStringAsync().Result.ToString();
+            var DetailProduct = JsonConvert.DeserializeObject<ProductViewModel>(ListResult);
 
             ListItem.Add(new OrderItemViewModel
             {
@@ -148,24 +144,23 @@ namespace XSIS.Shop.WebApps.Controllers
                 TotalAmount = (DetailProduct.UnitPrice.HasValue ? DetailProduct.UnitPrice.Value : 0) * OrderQuantity
             });
 
-            var ListItemCount = GroupListItem(ListItem);
+            string json = JsonConvert.SerializeObject(ListItem);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(json);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            string ApiEndPoint2 = ApiUrl + "api/OrderApi/GroupListItem/";
+            HttpClient client2 = new HttpClient();
+
+            HttpResponseMessage response2 = client2.PostAsync(ApiEndPoint2, byteContent).Result;
+
+            string ListResult2 = response2.Content.ReadAsStringAsync().Result.ToString();
+            var ListItemCount = JsonConvert.DeserializeObject<List<OrderItemViewModel>>(ListResult2);
+
             Session["ListOrderItem"] = ListItemCount;
 
             ViewBag.GrandTotal = ListItemCount.Sum(s => s.TotalAmount);
             return PartialView("_ListOrderItem", ListItemCount);
-        }
-
-        public List<OrderItemViewModel> GroupListItem(List<OrderItemViewModel> ListItem)
-        {
-            var CountVarian = (ListItem.GroupBy(x => x.ProductId).Select(a => new OrderItemViewModel
-            {
-                ProductId = a.Key,
-                ProductName = a.First().ProductName,
-                UnitPrice = a.First().UnitPrice,
-                Quantity = a.Sum(s => s.Quantity),
-                TotalAmount = a.Sum(s => s.TotalAmount)
-            })).ToList();
-            return CountVarian;
         }
 
         public ActionResult RemoveItemFromCurrentOrder(int ProductId)
@@ -175,41 +170,56 @@ namespace XSIS.Shop.WebApps.Controllers
                 ListItem = (List<OrderItemViewModel>)Session["ListOrderItem"];
             }
 
-            var RemoveItemvarian = RemoveItem(ProductId, ListItem);
+            OrderRemoveViewModel model = new OrderRemoveViewModel();
+            model.ProductId = ProductId;
+            model.ListOrderItem = ListItem;
+
+            string json = JsonConvert.SerializeObject(model);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(json);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            string ApiEndPoint2 = ApiUrl + "api/OrderApi/RemoveItem/";
+            HttpClient client2 = new HttpClient();
+
+            HttpResponseMessage response2 = client2.PostAsync(ApiEndPoint2, byteContent).Result;
+
+            string ListResult2 = response2.Content.ReadAsStringAsync().Result.ToString();
+            var RemoveItemvarian = JsonConvert.DeserializeObject<List<OrderItemViewModel>>(ListResult2);
+
             Session["ListOrderItem"] = RemoveItemvarian;
             ViewBag.GrandTotal = RemoveItemvarian.Sum(s => s.TotalAmount);
             return PartialView("_ListOrderItem", RemoveItemvarian);
-        }
-
-        public List<OrderItemViewModel> RemoveItem(int ProductId, List<OrderItemViewModel> ListItem)
-        {
-            for (int i = 0; i < ListItem.Count; i++)
-            {
-                if (ListItem[i].ProductId == ProductId)
-                {
-                    ListItem.Remove(ListItem[i]);
-                    break;
-                }
-            }
-            return ListItem;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(OrderViewModel order)
         {
+            List<CustomerViewModel> resultCustomer = new List<CustomerViewModel>();
+            string ApiEndPoint = ApiUrl + "api/CustomerApi/";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(ApiEndPoint).Result;
+
+            string ListResult = response.Content.ReadAsStringAsync().Result.ToString();
+            resultCustomer = JsonConvert.DeserializeObject<List<CustomerViewModel>>(ListResult);
+
             if (ModelState.IsValid)
             {
                 if (Session["ListOrderItem"] == null)
                 {
                     ModelState.AddModelError("", "List order item tidak boleh kosong.");
+                    ViewBag.CustomerId = new SelectList(resultCustomer, "Id", "CustomerName");
                     return View(order);
                 }
                 else
                 {
-                    // Generate Order Number
                     string OrderNum = string.Empty;
-                    int latestID = db.Order.OrderByDescending(x => x.Id).Select(x => x.Id).FirstOrDefault();
+
+                    string ApiEndPoint1 = ApiUrl + "api/OrderApi/GetLatestOrderID/";
+                    HttpClient client1 = new HttpClient();
+                    HttpResponseMessage response1 = client1.GetAsync(ApiEndPoint1).Result;
+                    int latestID = Convert.ToInt32(response1.Content.ReadAsStringAsync().Result.ToString());
 
                     if(latestID < 10)
                     {
@@ -225,43 +235,36 @@ namespace XSIS.Shop.WebApps.Controllers
                     string[] formats = { "dd/MM/yyyy" };
                     DateTime oDate = DateTime.ParseExact(order.OrderDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
 
-                    Order model = new Order();
-                    model.CustomerId = order.CustomerId;
-                    model.OrderDate = oDate;
-                    model.OrderNumber = OrderNum;
-                    model.TotalAmount = order.TotalAmount;
+                    order.OrderNumber = OrderNum;
+                    order.ListOrderItem = ListItem;
 
-                    db.Order.Add(model);
-                    db.SaveChanges();
+                    string json = JsonConvert.SerializeObject(order);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(json);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                    foreach(var item in ListItem)
+                    string ApiEndPoint2 = ApiUrl + "api/OrderApi/Post";
+                    HttpClient client2 = new HttpClient();
+
+                    HttpResponseMessage response2 = client2.PostAsync(ApiEndPoint2, byteContent).Result;
+
+                    string result = response2.Content.ReadAsStringAsync().Result.ToString();
+                    int success = int.Parse(result);
+
+                    if (success == 1)
                     {
-                        OrderItem modelItem = new OrderItem();
-                        modelItem.OrderId = model.Id;
-                        modelItem.ProductId = item.ProductId;
-                        modelItem.Quantity = item.Quantity;
-                        modelItem.UnitPrice = item.UnitPrice;
-
-                        db.OrderItem.Add(modelItem);
-                        db.SaveChanges();
-
+                        return RedirectToAction("Index");
                     }
-                    return RedirectToAction("Index");
+                    else
+                    {
+                        ViewBag.CustomerId = new SelectList(resultCustomer, "Id", "CustomerName");
+                        return View(order);
+                    }
                 }
-
             }
 
-            ViewBag.CustomerId = new SelectList(db.Customer, "Id", "FirstName", order.CustomerId);
+            ViewBag.CustomerId = new SelectList(resultCustomer, "Id", "CustomerName");
             return View(order);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

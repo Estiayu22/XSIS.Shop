@@ -516,11 +516,6 @@ namespace XSIS.Shop.Repository
             using (ShopDBEntities db = new ShopDBEntities())
             {
                 OrderViewModel model = new OrderViewModel();
-                /* select a.OrderNumber, d.FirstName, c.ProductName
-                   from[Order] a JOIN[OrderItem] b on a.Id = b.OrderId
-                   JOIN Product c on b.ProductId = c.Id
-                   JOIN Customer d on d.Id = a.CustomerId
-                    where a.OrderNumber = '542378' */
 
                 // Mapping Master Order
                 model = (from a in db.Order
@@ -555,6 +550,72 @@ namespace XSIS.Shop.Repository
                                         }).ToList();
 
                 return model;
+            }
+        }
+
+        public List<OrderItemViewModel> GroupListItem(List<OrderItemViewModel> ListItem)
+        {
+            var CountVarian = (ListItem.GroupBy(x => x.ProductId).Select(a => new OrderItemViewModel
+            {
+                ProductId = a.Key,
+                ProductName = a.First().ProductName,
+                UnitPrice = a.First().UnitPrice,
+                Quantity = a.Sum(s => s.Quantity),
+                TotalAmount = a.Sum(s => s.TotalAmount)
+            })).ToList();
+            return CountVarian;
+        }
+
+        public List<OrderItemViewModel> RemoveItem(OrderRemoveViewModel OrderRemoveItem)
+        {
+            for (int i = 0; i < OrderRemoveItem.ListOrderItem.Count; i++)
+            {
+                if (OrderRemoveItem.ListOrderItem[i].ProductId == OrderRemoveItem.ProductId)
+                {
+                    OrderRemoveItem.ListOrderItem.Remove(OrderRemoveItem.ListOrderItem[i]);
+                    break;
+                }
+            }
+            return OrderRemoveItem.ListOrderItem;
+        }
+
+        public int GetLatestOrderID()
+        {
+            using (ShopDBEntities db = new ShopDBEntities())
+            {
+                var result = db.Order.OrderByDescending(x => x.Id).Select(x => x.Id).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public void AddNewOrder(OrderViewModel order)
+        {
+            using (ShopDBEntities db = new ShopDBEntities())
+            {
+                string[] formats = { "dd/MM/yyyy" };
+                DateTime oDate = DateTime.ParseExact(order.OrderDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
+
+                Order model = new Order();
+                model.CustomerId = order.CustomerId;
+                model.OrderDate = oDate;
+                model.OrderNumber = order.OrderNumber;
+                model.TotalAmount = order.TotalAmount;
+
+                db.Order.Add(model);
+                db.SaveChanges();
+
+                foreach (var item in order.ListOrderItem)
+                {
+                    OrderItem modelItem = new OrderItem();
+                    modelItem.OrderId = model.Id;
+                    modelItem.ProductId = item.ProductId;
+                    modelItem.Quantity = item.Quantity;
+                    modelItem.UnitPrice = item.UnitPrice;
+
+                    db.OrderItem.Add(modelItem);
+                    db.SaveChanges();
+
+                }
             }
         }
     }
